@@ -1,41 +1,35 @@
-/* READ: I think that this was the file being edited Mon 1/20
-in class, prioritize merging the other version over this one!!! */
-
-
 package frc.robot.subsystems;
 
-//phoenix 6 imports
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+//phoenix6 imports
 import com.ctre.phoenix6.hardware.CANcoder;
-
-//ctre imports
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-
-//fasterxml imports
-//import com.fasterxml.jackson.databind.ser.std.CalendarSerializer;
-//unused ^
-
-//rev imports
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.RelativeEncoder;
-//import com.revrobotics.spark.SparkMax.IdleMode;
-//import com.revrobotics.SparkMaxRelativeEncoder.Type;
-//unused ^ & ^^
+// rev imports 
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.EncoderConfigAccessor;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
-//wpilib imports
+// wpilib imports
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-
-//frc imports
+import edu.wpi.first.wpilibj.Encoder;
+// frc imports
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 
 public class SwerveModule {
-    
+
     private final SparkMax driveMotor;
     private final SparkMax turnMotor;
+    private final SparkMaxConfig sparkConfigDrive;
+    private final SparkMaxConfig sparkConfigTurn;
 
     private final RelativeEncoder driveEncoder;
     private final RelativeEncoder turnEncoder;
@@ -43,13 +37,12 @@ public class SwerveModule {
     private final PIDController turnPidController;
 
     private final CANcoder absoluteEncoder;
+    @SuppressWarnings("unused")
     private final boolean absoluteEncoderReversed;
-    // ignore the error here ^, it is read.
     private final double absoluteEncoderOffsetRad;
 
     public SwerveModule(int driveMotorId, int turnMotorId, boolean driveMotorReversed, boolean turnMotorReversed,
-            int absoluteEncoderId, double absoluteEncoderOffset, boolean isAbsoluteEncoderReversed){
-        
+            int absoluteEncoderId, double absoluteEncoderOffset, boolean isAbsoluteEncoderReversed) {
 
         this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
         this.absoluteEncoderReversed = isAbsoluteEncoderReversed;
@@ -62,22 +55,44 @@ public class SwerveModule {
 
         driveMotor = new SparkMax(driveMotorId, SparkMax.MotorType.kBrushless);
         turnMotor = new SparkMax(turnMotorId, SparkMax.MotorType.kBrushless);
+        sparkConfigDrive = new SparkMaxConfig();
+        sparkConfigTurn = new SparkMaxConfig();
 
-        driveMotor.restoreFactoryDefaults();
-        turnMotor.restoreFactoryDefaults();
+        sparkConfigDrive
+                .idleMode(IdleMode.kBrake)
+                .inverted(false);
+        sparkConfigDrive.encoder
+                .positionConversionFactor(1000)
+                .velocityConversionFactor(1000);
+        sparkConfigDrive.closedLoop
+                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                .pid(1.0, 0.0, 0.0);
+        sparkConfigDrive.smartCurrentLimit(60, 60);
 
-        driveMotor.setInverted(false);
-        driveMotor.setSmartCurrentLimit(60, 60);
-        turnMotor.setSmartCurrentLimit(60, 60);
-        turnMotor.setInverted(true);
+        sparkConfigTurn
+                .idleMode(IdleMode.kBrake)
+                .inverted(true);
+        sparkConfigTurn.encoder
+                .positionConversionFactor(1000)
+                .velocityConversionFactor(1000);
+        sparkConfigTurn.closedLoop
+                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                .pid(1.0, 0.0, 0.0);
+        sparkConfigTurn.smartCurrentLimit(60, 60);
+
+        driveMotor.configure(sparkConfigDrive, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        turnMotor.configure(sparkConfigDrive, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         driveEncoder = driveMotor.getEncoder();
         turnEncoder = turnMotor.getEncoder();
-
-        driveEncoder.setPositionConversionFactor(ModuleConstants.kDriveEncoderRot2Meter);
-        driveEncoder.setVelocityConversionFactor(ModuleConstants.kDriveEncoderRPM2MeterPerSec);
-        turnEncoder.setPositionConversionFactor(ModuleConstants.kTurnEncoderRot2Rad);
-        turnEncoder.setVelocityConversionFactor(ModuleConstants.kTurnEncoderRPM2RadPerSec);
+        sparkConfigDrive.encoder.positionConversionFactor(ModuleConstants.kDriveEncoderRot2Meter);
+        sparkConfigDrive.encoder.velocityConversionFactor(ModuleConstants.kDriveEncoderRPM2MeterPerSec);
+        sparkConfigTurn.encoder.positionConversionFactor(ModuleConstants.kTurnEncoderRot2Rad);
+        sparkConfigTurn.encoder.velocityConversionFactor(ModuleConstants.kTurnEncoderRPM2RadPerSec);
+        //driveEncoder.setPositionConversionFactor(ModuleConstants.kDriveEncoderRot2Meter);
+        //driveEncoder.setVelocityConversionFactor(ModuleConstants.kDriveEncoderRPM2MeterPerSec);
+        //turnEncoder.setPositionConversionFactor(ModuleConstants.kTurnEncoderRot2Rad);
+        //turnEncoder.setVelocityConversionFactor(ModuleConstants.kTurnEncoderRPM2RadPerSec);
 
         turnPidController = new PIDController(0.6, 0, 0);
         turnPidController.enableContinuousInput(-Math.PI, Math.PI);
@@ -102,7 +117,7 @@ public class SwerveModule {
     }
 
     public double getAbsoluteEncoderRad() {
-        Rotation2d rot = Rotation2d.fromRadians((absoluteEncoder.getAbsolutePosition().getValue() * 2 * Math.PI));
+        Rotation2d rot = Rotation2d.fromRadians((absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI));
         return rot.minus(Rotation2d.fromRadians(absoluteEncoderOffsetRad)).getRadians();
     }
 
@@ -111,7 +126,7 @@ public class SwerveModule {
         turnEncoder.setPosition(getAbsoluteEncoderRad());
     }
 
-    public void resetTurn(){
+    public void resetTurn() {
         double position = getAbsoluteEncoderRad();
         turnEncoder.setPosition(position);
     }
@@ -128,7 +143,8 @@ public class SwerveModule {
         state = SwerveModuleState.optimize(state, getState().angle);
         driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
         turnMotor.set(turnPidController.calculate(getTurningPosition(), state.angle.getRadians()));
-        //turnMotor.set(turnPidController.calculate(getTurningPosition(), state.angle.getDegrees()));
+        // turnMotor.set(turnPidController.calculate(getTurningPosition(),
+        // state.angle.getDegrees()));
     }
 
     public void stop() {
@@ -138,12 +154,10 @@ public class SwerveModule {
         turnMotor.set(0);
     }
 
-    public SwerveModulePosition getPosition(){
+    public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(
-            driveEncoder.getPosition(),
-            Rotation2d.fromRadians(getAbsoluteEncoderRad())
-            );
-      }
-
+                driveEncoder.getPosition(),
+                Rotation2d.fromRadians(getAbsoluteEncoderRad()));
+    }
 
 }
