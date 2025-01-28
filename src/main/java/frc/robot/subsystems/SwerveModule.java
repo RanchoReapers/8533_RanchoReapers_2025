@@ -148,8 +148,8 @@ public class SwerveModule {
     }
 
     public void stop() {
-        driveMotor.setIdleMode(SparkMax.IdleMode.kBrake);
-        turnMotor.setIdleMode(SparkMax.IdleMode.kBrake);
+        //driveMotor.setIdleMode(IdleMode.kBrake);
+        //turnMotor.setIdleMode(IdleMode.kBrake);
         driveMotor.set(0);
         turnMotor.set(0);
     }
