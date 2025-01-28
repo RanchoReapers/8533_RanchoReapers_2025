@@ -26,7 +26,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.USB;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.commands.climberJoystickCmd;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.SwerveSubSystem;
 import frc.robot.subsystems.climberSubSystem;
 
 
@@ -38,7 +38,7 @@ import frc.robot.subsystems.climberSubSystem;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  public final static SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  public final static SwerveSubSystem swerveSubsystem = new SwerveSubSystem();
   //public final static ArmSubSystem armSubsystem = new ArmSubSystem(13);
   public final static climberSubSystem climberSubSystem = new climberSubSystem(15,14);
   public final static XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
