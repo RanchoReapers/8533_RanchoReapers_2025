@@ -7,7 +7,7 @@ Motor in middle of arm (claw to grab onto cage and release)  -- both directions 
 (possibly 2)
 
 
-logic for aim assist:
+logic for aim assist -- please enter edit mode to read the code below easier:
 ----
 
 when robot IsEnabled {
