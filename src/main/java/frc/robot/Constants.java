@@ -111,20 +111,20 @@ public final class Constants {
         //SECTION - Motor ports
         //NOTE - DO NOT CHANGE! INTEGERS ARE THE IMPORTS FOR EACH MOTOR
         //NOTE - THIS IS THE FRONT DRIVE MOTOR PORTS
-        public static final int kFrontLeftDriveMotorPort = 1;
-        public static final int kFrontLeftTurningMotorPort = 2;
+        public static final int kFrontLeftDriveMotorPort = 4;
+        public static final int kFrontLeftTurningMotorPort = 5;
         
         //NOTE - THIS IS THE FRONT TURNING MOTOR PORTS
-        public static final int kFrontRightDriveMotorPort = 6;
-        public static final int kFrontRightTurningMotorPort = 5;
+        public static final int kFrontRightDriveMotorPort = 7;
+        public static final int kFrontRightTurningMotorPort = 6;
 
         //NOTE - THIS IS THE BACK DRIVE MOTOR PORTS
-        public static final int kBackLeftDriveMotorPort = 3; // was 3
-        public static final int kBackLeftTurningMotorPort = 4; // was 4
+        public static final int kBackLeftDriveMotorPort = 3;
+        public static final int kBackLeftTurningMotorPort = 2;
 
         //NOTE - THIS IS THE BACK TURNING MOTOR PORTS
-        public static final int kBackRightDriveMotorPort = 8;
-        public static final int kBackRightTurningMotorPort = 7;
+        public static final int kBackRightDriveMotorPort = 9;
+        public static final int kBackRightTurningMotorPort = 8;
         //!SECTION
 
         //SECTION - Turning & Drive reverse values
@@ -154,10 +154,10 @@ public final class Constants {
 
         //SECTION - ENCODER PORTS
         //NOTE - THIS IS THE ENCODER PORTS FOR THE DRIVE, IN NUMERICAL ORDER
-        public static final int kBackRightDriveAbsoluteEncoderPort = 11;
-        public static final int kFrontRightDriveAbsoluteEncoderPort = 12;
-        public static final int kFrontLeftDriveAbsoluteEncoderPort = 9;
-        public static final int kBackLeftDriveAbsoluteEncoderPort = 10;
+        public static final int kBackRightDriveAbsoluteEncoderPort = 13;
+        public static final int kFrontRightDriveAbsoluteEncoderPort = 10;
+        public static final int kFrontLeftDriveAbsoluteEncoderPort = 11;
+        public static final int kBackLeftDriveAbsoluteEncoderPort = 12;
         //!SECTION
 
         //SECTION - ABS Drive Encoder Reverse values
