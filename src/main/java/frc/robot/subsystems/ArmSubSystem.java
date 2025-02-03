@@ -3,7 +3,7 @@ import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ArmSubSystem extends SubsystemBase{
+public class ArmSubSystem extends SubsystemBase {
     
     SparkMax armDriveLeft;
     SparkMax armDriveRight;
@@ -26,8 +26,9 @@ public class ArmSubSystem extends SubsystemBase{
           armDriveRight.stopMotor();
           
         }
+    }
       public void endMotors() {
         armDriveLeft.stopMotor();
         armDriveRight.stopMotor();
-      }
+  }
 }
