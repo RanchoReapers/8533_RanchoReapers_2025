@@ -3,11 +3,11 @@ import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class intakeSubSystem extends SubsystemBase{
+public class IntakeSubSystem extends SubsystemBase{
     
     SparkMax intakeMotor;
 
-    public intakeSubSystem(int clampOpenCanId, boolean activate/*int armCANid, int handCANid, int ringHoldingCANid*/) {
+    public IntakeSubSystem(int clampOpenCanId, boolean activate/*int armCANid, int handCANid, int ringHoldingCANid*/) {
       
       intakeMotor = new SparkMax(clampOpenCanId, SparkMax.MotorType.kBrushed);
 }
