@@ -2,7 +2,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.CageClawSubSystem;
 import frc.robot.subsystems.IntakeSubSystem;
 
 public class IntakeCmd extends Command {
