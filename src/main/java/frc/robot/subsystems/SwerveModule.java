@@ -86,9 +86,9 @@ public class SwerveModule {
         //driveEncoder.setPositionConversionFactor(ModuleConstants.kDriveEncoderRot2Meter);
         //driveEncoder.setVelocityConversionFactor(ModuleConstants.kDriveEncoderRPM2MeterPerSec);
         //turnEncoder.setPositionConversionFactor(ModuleConstants.kTurnEncoderRot2Rad);
-        //turnEncoder.setVelocityConversionFactor(ModuleConstants.kTurnEncoderRPM2RadPerSec);
+        //turnEncoder.setVelocityConversionFacto r(ModuleConstants.kTurnEncoderRPM2RadPerSec);
 
-        turnPidController = new PIDController(0.6, 0, 0);
+        turnPidController = new PIDController(0.43, 0, 0);
         turnPidController.enableContinuousInput(-Math.PI, Math.PI);
 
         resetEncoders();
@@ -126,7 +126,7 @@ public class SwerveModule {
     }
 
     public SwerveModuleState getState() {
-        return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));
+        return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAbsoluteEncoderRad()));
     }
 
     public void setDesiredState(SwerveModuleState state) {
@@ -136,7 +136,7 @@ public class SwerveModule {
         }
         state = SwerveModuleState.optimize(state, getState().angle);
         driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
-        turnMotor.set(turnPidController.calculate(getTurningPosition(), state.angle.getRadians()));
+        turnMotor.set(turnPidController.calculate(getAbsoluteEncoderRad(), state.angle.getRadians()));
         // turnMotor.set(turnPidController.calculate(getTurningPosition(),
         // state.angle.getDegrees()));
     }
