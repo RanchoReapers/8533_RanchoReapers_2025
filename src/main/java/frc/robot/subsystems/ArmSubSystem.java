@@ -3,50 +3,32 @@ import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ArmSubSystem extends SubsystemBase{
+public class ArmSubSystem extends SubsystemBase {
     
-    SparkMax armDrive;
-    SparkMax handSuction;
-    SparkMax ringHolding;
+    SparkMax armDriveLeft;
+    SparkMax armDriveRight;
 
-    public ArmSubSystem(int armCANid, int handCANid, int ringHoldingCANid) {
-        armDrive = new SparkMax(armCANid, SparkMax.MotorType.kBrushed);
-         handSuction = new SparkMax(handCANid, SparkMax.MotorType.kBrushed);
-         ringHolding = new SparkMax(ringHoldingCANid, SparkMax.MotorType.kBrushed);
+    public ArmSubSystem(int armUpCANid, int armDownCanid, int handCANid, int ringHoldingCANid) {
+        armDriveLeft = new SparkMax(armUpCANid, SparkMax.MotorType.kBrushed);
+        armDriveRight = new SparkMax(armDownCanid, SparkMax.MotorType.kBrushed);
     }
     public void armControl(double rightTrigger, double leftTrigger) {
         if (leftTrigger > 0.02 && rightTrigger < 0.02) {
-          armDrive.setVoltage(-6 * leftTrigger);
+          armDriveLeft.setVoltage(-6 * leftTrigger);
+          armDriveRight.setVoltage(12 * rightTrigger);
         }
         else if (rightTrigger > 0.02 && leftTrigger < 0.02) {
-          armDrive.setVoltage(12 * rightTrigger);
+          armDriveLeft.setVoltage(12 * rightTrigger);
+          armDriveRight.setVoltage(-6 * leftTrigger);
         }
         else {
-          armDrive.stopMotor();
+          armDriveLeft.stopMotor();
+          armDriveRight.stopMotor();
+          
         }
-       boolean rightBumper = false;
-        if (rightBumper == true) {
-          handSuction.setVoltage(4);
-          ringHolding.setVoltage(4);
-        }
-        else {
-          handSuction.stopMotor();
-          ringHolding.stopMotor();
-        }
-        boolean leftBumper = false;
-        if (leftBumper == true) {
-          //handSuction.setVoltage(-4);
-          //ringHolding.setVoltage(-4);
-        }
-        else {
-          handSuction.stopMotor();
-          ringHolding.stopMotor();
-        }
-      }
-
+    }
       public void endMotors() {
-        armDrive.stopMotor();
-        ringHolding.stopMotor();
-        handSuction.stopMotor();
-      }
+        armDriveLeft.stopMotor();
+        armDriveRight.stopMotor();
+  }
 }
