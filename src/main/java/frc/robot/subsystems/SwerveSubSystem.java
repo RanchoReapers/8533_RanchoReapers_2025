@@ -138,6 +138,7 @@ public class SwerveSubSystem extends SubsystemBase {
         SmartDashboard.putNumber("Front Right Turn Angle", frontRight.getTurningPosition() / Math.PI *180);
         SmartDashboard.putNumber("Back Right Turn Angle", backRight.getTurningPosition() / Math.PI *180);
 
+
         SmartDashboard.putNumber("Front Left Cancoder Angle", frontLeft.getAbsoluteEncoderRad() / Math.PI *180);
         SmartDashboard.putNumber("Back Left Cancoder Angle", backLeft.getAbsoluteEncoderRad() / Math.PI *180);
         SmartDashboard.putNumber("Front Right Cancoder Angle", frontRight.getAbsoluteEncoderRad() / Math.PI *180);

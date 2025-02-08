@@ -44,6 +44,7 @@ public class SwerveModule {
 
         CANcoderConfiguration config = new CANcoderConfiguration();
         config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        config.MagnetSensor.MagnetOffset = absoluteEncoderOffset;
 
         absoluteEncoder.getConfigurator().apply(config);
 
@@ -67,8 +68,8 @@ public class SwerveModule {
                 .idleMode(IdleMode.kBrake)
                 .inverted(true);
         sparkConfigTurn.encoder
-                .positionConversionFactor(1000)
-                .velocityConversionFactor(1000);
+                .positionConversionFactor(Math.PI * 2)
+                .velocityConversionFactor(Math.PI * 2);
         sparkConfigTurn.closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                 .pid(1.0, 0.0, 0.0);
@@ -88,9 +89,11 @@ public class SwerveModule {
         //turnEncoder.setPositionConversionFactor(ModuleConstants.kTurnEncoderRot2Rad);
         //turnEncoder.setVelocityConversionFacto r(ModuleConstants.kTurnEncoderRPM2RadPerSec);
 
-        turnPidController = new PIDController(0.43, 0, 0);
+        //turnPidController = new PIDController(0.06, 0.15, 0);
+        turnPidController = new PIDController(0.05, 0.09, 0);
+        //best ^
         turnPidController.enableContinuousInput(-Math.PI, Math.PI);
-
+    
         resetEncoders();
     }
 
@@ -112,7 +115,8 @@ public class SwerveModule {
 
     public double getAbsoluteEncoderRad() {
         Rotation2d rot = Rotation2d.fromRadians((absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI));
-        return rot.minus(Rotation2d.fromRadians(absoluteEncoderOffsetRad)).getRadians();
+        //return rot.minus(Rotation2d.fromRadians(absoluteEncoderOffsetRad)).getRadians();
+        return rot.getRadians();
     }
 
     public void resetEncoders() {
@@ -134,7 +138,8 @@ public class SwerveModule {
             stop();
             return;
         }
-        state = SwerveModuleState.optimize(state, getState().angle);
+        state.optimize(getState().angle);
+        //state = SwerveModuleState.optimize(state, getState().angle);
         driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
         turnMotor.set(turnPidController.calculate(getAbsoluteEncoderRad(), state.angle.getRadians()));
         // turnMotor.set(turnPidController.calculate(getTurningPosition(),

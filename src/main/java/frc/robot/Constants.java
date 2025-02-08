@@ -178,7 +178,7 @@ public final class Constants {
         // public static final boolean kBackRightDriveAbsoluteEncoderReversed = true;
 
         // IF NO WORK DELETE AND UNCOMMENT CODE ABOVE
-        public static final boolean kFrontLeftDriveAbsoluteEncoderReversed = true;
+        public static final boolean kFrontLeftDriveAbsoluteEncoderReversed = false;
         public static final boolean kFrontRightDriveAbsoluteEncoderReversed = true;
         public static final boolean kBackLeftDriveAbsoluteEncoderReversed = true;
         public static final boolean kBackRightDriveAbsoluteEncoderReversed = true;
@@ -205,13 +205,13 @@ public final class Constants {
          * // uncomment if this does not fix the motors
          */
 
-        public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = 0 * Math.PI * 2;
+        public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = 0.409668 - (-0.45725); 
         // back left ^
-        public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = 0 * Math.PI * 2;
+        public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = -0.127686 - (-0.494500);
         // front right ^
-        public static final double kBackRightDriveAbsoluteEncoderOffsetRad = 0 * Math.PI * 2;
+        public static final double kBackRightDriveAbsoluteEncoderOffsetRad = -0.375 - 0.165039;
         // back right ^
-        public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = 0 * Math.PI * 2;
+        public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = -0.33000 - 0.236572; 
         // front left ^
 
         public static final double kPhysicalMaxSpeedMetersPerSecond = 4.4;
