@@ -132,7 +132,7 @@ public class SwerveSubSystem extends SubsystemBase {
     }
 
     public void disabledPeriodic() {
-        SmartDashboard.putNumber("Robot Heading", getHeading());;
+        SmartDashboard.putNumber("Robot Heading", getHeading());
         SmartDashboard.putNumber("Front Left Turn Angle", frontLeft.getTurningPosition() / Math.PI *180);
         SmartDashboard.putNumber("Back Left Turn Angle", backLeft.getTurningPosition() / Math.PI *180);
         SmartDashboard.putNumber("Front Right Turn Angle", frontRight.getTurningPosition() / Math.PI *180);
