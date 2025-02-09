@@ -17,14 +17,13 @@ public class IntakeCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
     intakeSubSystem.intakeControl(RobotContainer.driverController.getBButton());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intakeSubSystem.endMotors(); // stop motors once interrupted
+    intakeSubSystem.endIntakeMotor(); // stop motors once interrupted
   }
 
   // Returns true when the command should end.
