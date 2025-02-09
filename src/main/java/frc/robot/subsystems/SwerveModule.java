@@ -34,7 +34,6 @@ public class SwerveModule {
     private final PIDController turnPidController;
 
     private final CANcoder absoluteEncoder;
-    @SuppressWarnings("unused")
     private final boolean absoluteEncoderReversed;
     private final double absoluteEncoderOffsetRad;
     private final double chassisOffset = 0;
