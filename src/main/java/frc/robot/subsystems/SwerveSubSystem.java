@@ -22,7 +22,7 @@ public class SwerveSubSystem extends SubsystemBase {
         DriveConstants.kFrontLeftTurningEncoderReversed, 
         DriveConstants.kFrontLeftDriveAbsoluteEncoderPort,
         DriveConstants.kFrontLeftDriveAbsoluteEncoderOffsetRad, 
-        DriveConstants.kFrontLeftDriveAbsoluteEncoderReversed);
+        DriveConstants.kFrontLeftDriveAbsoluteEncoderReversed, DriveConstants.kFrontLeftDriveChassisOffset);
 
     private final SwerveModule frontRight = new SwerveModule(
         DriveConstants.kFrontRightDriveMotorPort, 
@@ -31,7 +31,7 @@ public class SwerveSubSystem extends SubsystemBase {
         DriveConstants.kFrontRightTurningEncoderReversed, 
         DriveConstants.kFrontRightDriveAbsoluteEncoderPort,
         DriveConstants.kFrontRightDriveAbsoluteEncoderOffsetRad, 
-        DriveConstants.kFrontRightDriveAbsoluteEncoderReversed);
+        DriveConstants.kFrontRightDriveAbsoluteEncoderReversed, DriveConstants.kFrontRightDriveChassisOffset);
 
     private final SwerveModule backLeft = new SwerveModule(
         DriveConstants.kBackLeftDriveMotorPort, 
@@ -40,7 +40,7 @@ public class SwerveSubSystem extends SubsystemBase {
         DriveConstants.kBackLeftTurningEncoderReversed, 
         DriveConstants.kBackLeftDriveAbsoluteEncoderPort,
         DriveConstants.kBackLeftDriveAbsoluteEncoderOffsetRad, 
-        DriveConstants.kBackLeftDriveAbsoluteEncoderReversed);
+        DriveConstants.kBackLeftDriveAbsoluteEncoderReversed, DriveConstants.kBackLeftDriveChassisOffset);
 
     private final SwerveModule backRight = new SwerveModule(
         DriveConstants.kBackRightDriveMotorPort, 
@@ -49,7 +49,7 @@ public class SwerveSubSystem extends SubsystemBase {
         DriveConstants.kBackRightTurningEncoderReversed, 
         DriveConstants.kBackRightDriveAbsoluteEncoderPort,
         DriveConstants.kBackRightDriveAbsoluteEncoderOffsetRad, 
-        DriveConstants.kBackRightDriveAbsoluteEncoderReversed);
+        DriveConstants.kBackRightDriveAbsoluteEncoderReversed, DriveConstants.kBackRightDriveChassisOffset);
 
     private AHRS gyro = new AHRS(AHRS.NavXComType.kMXP_SPI);
 

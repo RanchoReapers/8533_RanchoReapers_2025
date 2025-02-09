@@ -10,6 +10,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkClosedLoopController;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -17,6 +18,8 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
+
+
 
 public class SwerveModule {
 
@@ -34,13 +37,16 @@ public class SwerveModule {
     @SuppressWarnings("unused")
     private final boolean absoluteEncoderReversed;
     private final double absoluteEncoderOffsetRad;
+    private final double chassisOffset = 0;
 
     public SwerveModule(int driveMotorId, int turnMotorId, boolean driveMotorReversed, boolean turnMotorReversed,
-            int absoluteEncoderId, double absoluteEncoderOffset, boolean isAbsoluteEncoderReversed) {
+            int absoluteEncoderId, double absoluteEncoderOffset, boolean isAbsoluteEncoderReversed, double chassisOffset) {
 
-        this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
+        absoluteEncoderOffsetRad = absoluteEncoderOffset;
         this.absoluteEncoderReversed = isAbsoluteEncoderReversed;
         absoluteEncoder = new CANcoder(absoluteEncoderId);
+
+        chassisOffset = this.chassisOffset;
 
         CANcoderConfiguration config = new CANcoderConfiguration();
         config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
@@ -90,13 +96,12 @@ public class SwerveModule {
         //turnEncoder.setVelocityConversionFacto r(ModuleConstants.kTurnEncoderRPM2RadPerSec);
 
         //turnPidController = new PIDController(0.06, 0.15, 0);
-        turnPidController = new PIDController(0.05, 0.09, 0);
+        turnPidController = new PIDController(0.05, 0.09, 0.005);
         //best ^
         turnPidController.enableContinuousInput(-Math.PI, Math.PI);
     
         resetEncoders();
     }
-
     public double getDrivePosition() {
         return driveEncoder.getPosition();
     }
@@ -115,13 +120,12 @@ public class SwerveModule {
 
     public double getAbsoluteEncoderRad() {
         Rotation2d rot = Rotation2d.fromRadians((absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI));
-        //return rot.minus(Rotation2d.fromRadians(absoluteEncoderOffsetRad)).getRadians();
-        return rot.getRadians();
-    }
+        return rot.minus(Rotation2d.fromRadians(chassisOffset)).getRadians();}
 
     public void resetEncoders() {
         driveEncoder.setPosition(0);
-        turnEncoder.setPosition(getAbsoluteEncoderRad());
+        //turnEncoder.setPosition(getAbsoluteEncoderRad());
+        //absoluteEncoder.setPosition(0);
     }
 
     public void resetTurn() {
@@ -130,15 +134,21 @@ public class SwerveModule {
     }
 
     public SwerveModuleState getState() {
-        return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAbsoluteEncoderRad()));
+        return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAbsoluteEncoderRad() - chassisOffset));
     }
 
     public void setDesiredState(SwerveModuleState state) {
-        if (Math.abs(state.speedMetersPerSecond) < 0.001) {
+        
+        SwerveModuleState correctedSwerveModuleState = state;
+        correctedSwerveModuleState.speedMetersPerSecond = state.speedMetersPerSecond;
+        correctedSwerveModuleState.angle = state.angle.plus(Rotation2d.fromRadians(chassisOffset));
+        
+        if (Math.abs(correctedSwerveModuleState.speedMetersPerSecond) < 0.001) {
             stop();
             return;
         }
-        state.optimize(getState().angle);
+
+        correctedSwerveModuleState.optimize(getState().angle);
         //state = SwerveModuleState.optimize(state, getState().angle);
         driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
         turnMotor.set(turnPidController.calculate(getAbsoluteEncoderRad(), state.angle.getRadians()));

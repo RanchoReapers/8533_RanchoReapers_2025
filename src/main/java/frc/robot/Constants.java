@@ -178,7 +178,7 @@ public final class Constants {
         // public static final boolean kBackRightDriveAbsoluteEncoderReversed = true;
 
         // IF NO WORK DELETE AND UNCOMMENT CODE ABOVE
-        public static final boolean kFrontLeftDriveAbsoluteEncoderReversed = false;
+        public static final boolean kFrontLeftDriveAbsoluteEncoderReversed = true; // was false -  2/8/25
         public static final boolean kFrontRightDriveAbsoluteEncoderReversed = true;
         public static final boolean kBackLeftDriveAbsoluteEncoderReversed = true;
         public static final boolean kBackRightDriveAbsoluteEncoderReversed = true;
@@ -213,6 +213,14 @@ public final class Constants {
         // back right ^
         public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = -0.33000 - 0.236572; 
         // front left ^
+
+        // CHASSIS OFFSET REFERENCE
+        public static final double kBackLeftDriveChassisOffset = 60 * Math.PI / 180; 
+        public static final double kFrontRightDriveChassisOffset = 120 * Math.PI / 180;
+        public static final double kBackRightDriveChassisOffset = 110 * Math.PI / 180;
+        public static final double kFrontLeftDriveChassisOffset = 45 * Math.PI / 180;
+
+
 
         public static final double kPhysicalMaxSpeedMetersPerSecond = 4.4;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
