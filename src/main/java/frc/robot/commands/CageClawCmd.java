@@ -17,16 +17,17 @@ public class CageClawCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // boolean rightBumper = RobotContainer.driverController.getAButton();
-    boolean aPress = RobotContainer.driverController.getAButton();
-    cageClawSubSystem.clampControl(aPress);
-    // armSubsystem.armControl(rightBumper, leftBumper);
-    // ^^ You can uncomment the above 3 to switch to arm control using A & B buttons instead of lt & rt
+    
+    if (RobotContainer.driverController.getXButton() == true) { 
+      cageClawSubSystem.clampControl();
+    }
+
   }
+
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    cageClawSubSystem.endMotors();// stop motors once interrupted
+    cageClawSubSystem.endClawMotors(); // stop motors once interrupted
   }
 
   // Returns true when the command should end.

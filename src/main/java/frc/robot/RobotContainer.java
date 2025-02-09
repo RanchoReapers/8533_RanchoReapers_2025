@@ -25,10 +25,11 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.USB;
 import frc.robot.commands.SwerveJoystickCmd;
-import frc.robot.commands.climberJoystickCmd;
+import frc.robot.commands.armJoystickCmd;
+import frc.robot.subsystems.ArmSubSystem;
 import frc.robot.subsystems.SwerveSubSystem;
-import frc.robot.subsystems.climberSubSystem;
-
+import frc.robot.subsystems.IntakeSubSystem;
+import frc.robot.subsystems.CageClawSubSystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -39,8 +40,9 @@ import frc.robot.subsystems.climberSubSystem;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public final static SwerveSubSystem swerveSubsystem = new SwerveSubSystem();
-  //public final static ArmSubSystem armSubsystem = new ArmSubSystem(13);
-  public final static climberSubSystem climberSubSystem = new climberSubSystem(15,14);
+  public final static ArmSubSystem armSubsystem = new ArmSubSystem(14,15);
+  public final static CageClawSubSystem cageClawSubsystem = new CageClawSubSystem(16);
+  public final static IntakeSubSystem intakeSubsystem = new IntakeSubSystem(17);
   public final static XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
   public final static XboxController operatorController = new XboxController(USB.OPERATOR_CONTROLLER);
 
@@ -52,8 +54,7 @@ public class RobotContainer {
      () -> -driverController.getRawAxis(OIConstants.kDriverRotAxis), 
      () -> !driverController.getLeftBumperButton()));
 
-     //armSubsystem.setDefaultCommand(new armJoystickCmd(armSubsystem));
-     climberSubSystem.setDefaultCommand(new climberJoystickCmd(climberSubSystem));
+     armSubsystem.setDefaultCommand(new armJoystickCmd(armSubsystem));
 
 
     // Configure the button bindings

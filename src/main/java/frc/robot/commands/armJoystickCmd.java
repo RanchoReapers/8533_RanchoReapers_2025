@@ -17,18 +17,16 @@ public class armJoystickCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double rightTrigger = RobotContainer.driverController.getRightTriggerAxis();
-    double leftTrigger = RobotContainer.driverController.getLeftTriggerAxis();
-    // boolean rightBumper = RobotContainer.driverController.getAButton();
-    // boolean leftBumper = RobotContainer.driverController.getBButton();
-    armSubsystem.armControl(rightTrigger, leftTrigger);
-    // armSubsystem.armControl(rightBumper, leftBumper);
-    // ^^ You can uncomment the above 3 to switch to arm control using A & B buttons instead of lt & rt
+
+    if (RobotContainer.driverController.getXButton() == true) { 
+      armSubsystem.armControl2State();
+    }
+
   }
-  // Called once the command ends or is interrupted.
+
   @Override
   public void end(boolean interrupted) {
-    armSubsystem.endMotors();// stop motors once interrupted
+    armSubsystem.endArmMotors(); // stop motors once interrupted
   }
 
   // Returns true when the command should end.

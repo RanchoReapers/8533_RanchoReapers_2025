@@ -13,6 +13,8 @@ public class LimelightDetectionSubSystem {
     NetworkTableEntry ta = table.getEntry("ta");
 
     public LimelightDetectionSubSystem() {
+
+        
     }
 
     public void periodicOdometry() {

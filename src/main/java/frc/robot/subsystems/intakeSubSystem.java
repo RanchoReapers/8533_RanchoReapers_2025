@@ -7,9 +7,9 @@ public class IntakeSubSystem extends SubsystemBase{
     
     SparkMax intakeMotor;
 
-    public IntakeSubSystem(int clampOpenCanId, boolean activate/*int armCANid, int handCANid, int ringHoldingCANid*/) {
+    public IntakeSubSystem(int intakeRollersCanId, boolean activate) {
       
-      intakeMotor = new SparkMax(clampOpenCanId, SparkMax.MotorType.kBrushed);
+      intakeMotor = new SparkMax(intakeRollersCanId, SparkMax.MotorType.kBrushed);
 }
       public void intakeControl(boolean bPress){
           bPress = !bPress;
@@ -20,10 +20,8 @@ public class IntakeSubSystem extends SubsystemBase{
           intakeMotor.setVoltage(0.5);
         }
       }
-
+// why does the motor need to be constantly moving?????
       public void endMotors() {
         intakeMotor.stopMotor();
-        //ringHolding.stopMotor();
-        //handSuction.stopMotor();
       }
 }
