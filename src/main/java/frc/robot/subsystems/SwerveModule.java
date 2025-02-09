@@ -31,13 +31,12 @@ public class SwerveModule {
     private final PIDController turnPidController;
 
     private final CANcoder absoluteEncoder;
-    @SuppressWarnings("unused")
     private final boolean absoluteEncoderReversed;
     private final double absoluteEncoderOffsetRad;
 
     public SwerveModule(int driveMotorId, int turnMotorId, boolean driveMotorReversed, boolean turnMotorReversed,
             int absoluteEncoderId, double absoluteEncoderOffset, boolean isAbsoluteEncoderReversed) {
-
+-
         this.absoluteEncoderOffsetRad = absoluteEncoderOffset;
         this.absoluteEncoderReversed = isAbsoluteEncoderReversed;
         absoluteEncoder = new CANcoder(absoluteEncoderId);

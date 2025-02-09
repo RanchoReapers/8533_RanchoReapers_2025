@@ -62,7 +62,7 @@ public class SwerveSubSystem extends SubsystemBase {
           backRight.getPosition()
         }, new Pose2d(5.0, 13.5, new Rotation2d()));
 
-    public SwerveSubSystem() {
+    public SwerveSubSystem()  {
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
@@ -73,7 +73,7 @@ public class SwerveSubSystem extends SubsystemBase {
                 backRight.resetTurn();
             }catch (Exception e) {
             }
-        }).start();
+        }).start                                                                                                                                                                                                                                            ();
     }
 
     public void resetTurn(){
