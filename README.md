@@ -17,7 +17,8 @@ IF (( currentAprilTag == (# of april tag by coral station for red team) OR curre
 } ELSE IF (( currentAprilTag == (# of april tag by reef station for red team) OR currentAprilTag == (# of april tag by reef station for blue team) )) AND (( 
              distanceFromCurrentTag < (# of meters/inches/feet/cm? away from tag -- need to testing for distance) )) {
 
-    aimAssist("placeCoral");
+    a![2025 FRC REEFSCAPE Controller Layout - 8533RR](https://github.com/user-attachments/assets/59d0ea16-ea2c-4055-883b-54c0c7e93727)
+imAssist("placeCoral");
     // depends on if we are able to pick up algae whether or not we should add a function to place coral... if we need to line up to pickup algae aim assist will        // hinder & we are not able to distingush between intent to place coral and remove algae..
     // we could map the aim assist for the coral dropoff to a button press, but still have the pickup be automatic
     }
