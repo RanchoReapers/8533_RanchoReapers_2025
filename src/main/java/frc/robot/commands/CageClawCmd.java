@@ -7,7 +7,7 @@ import frc.robot.subsystems.CageClawSubSystem;
 public class CageClawCmd extends Command {
     CageClawSubSystem cageClawSubSystem;
     public CageClawCmd(CageClawSubSystem cageClawSubSystem) {
-        this.cageClawSubSystem = cageClawSubSystem;
+        cageClawSubSystem = this.cageClawSubSystem;
         addRequirements(cageClawSubSystem);
     }
     // Called when the command is initially scheduled.
@@ -17,11 +17,7 @@ public class CageClawCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-    if (RobotContainer.driverController.getXButton() == true) { 
-      cageClawSubSystem.clampControl();
-    }
-
+      cageClawSubSystem.clampControl(RobotContainer.driverController.getYButtonPressed());
   }
 
   // Called once the command ends or is interrupted.

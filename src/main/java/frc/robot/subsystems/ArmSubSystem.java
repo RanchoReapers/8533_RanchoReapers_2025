@@ -20,16 +20,15 @@ public class ArmSubSystem extends SubsystemBase {
 
   boolean armLow = false;
 
-  public ArmSubSystem(int armUpCANid, int armDownCanid) {
-    armDriveLeft = new SparkMax(armUpCANid, SparkMax.MotorType.kBrushed);
-    armDriveRight = new SparkMax(armDownCanid, SparkMax.MotorType.kBrushed);
+  public ArmSubSystem(int armLeftCANId, int armRightCanId) {
+    armDriveLeft = new SparkMax(armLeftCANId, SparkMax.MotorType.kBrushed);
+    armDriveRight = new SparkMax(armRightCanId, SparkMax.MotorType.kBrushed);
 
     sparkConfigDriveRight = new SparkMaxConfig();
     sparkConfigDriveLeft = new SparkMaxConfig();
 
     armEncoderLeft = armDriveLeft.getAbsoluteEncoder();
     armEncoderRight = armDriveRight.getAbsoluteEncoder();
-
 
     sparkConfigDriveLeft
         .idleMode(IdleMode.kBrake)
@@ -54,22 +53,19 @@ public class ArmSubSystem extends SubsystemBase {
     armDriveRight.stopMotor();
   }
 
-  public void armControl2State() {
-
-    if (armEncoderLeft.getPosition() - armEncoderRight.getPosition() <= 5 * Math.PI / 180) {
-    if (armEncoderLeft.getPosition() >= 60 * Math.PI / 180) {
-      armLow = false;
-    } else if (armEncoderLeft.getPosition() <= 30 * Math.PI / 180) {
-      armLow = true;
+  public void armControl2State(boolean xButton) {
+    if(xButton == true) {
+      armLow = !armLow;
     }
-    if (armLow == true) {
-      if (armEncoderLeft.getPosition() >= 30 * Math.PI / 180) {
-        armDriveLeft.setVoltage(-6);
-        armDriveRight.setVoltage(-6);
-      } else {
-        endArmMotors();
-      }
-    } else if (armLow == false) {
+    if (armEncoderLeft.getPosition() - armEncoderRight.getPosition() <= 5 * Math.PI / 180) {
+      if (armLow == true) {
+        if (armEncoderLeft.getPosition() >= 30 * Math.PI / 180) {
+          armDriveLeft.setVoltage(-6);
+          armDriveRight.setVoltage(-6);
+        } else {
+          endArmMotors();
+        }
+      } else if (armLow == false) {
         if (armEncoderLeft.getPosition() <= 60 * Math.PI / 180) {
           armDriveLeft.setVoltage(6);
           armDriveRight.setVoltage(6);
@@ -78,7 +74,8 @@ public class ArmSubSystem extends SubsystemBase {
         }
       }
     } else {
-      System.out.println(" Attempted to move arm but failed. Arm motors more than 5 degrees out of sync. Value of bool armLow: " + armLow);
+      System.out.println("Attempted to move arm but failed. Arm motors more than 5 degrees out of sync. Value of bool armLow: " + armLow);
+      endArmMotors();
     }
   }
 

@@ -11,17 +11,15 @@ public class CageClawSubSystem extends SubsystemBase {
 
   SparkMax cageClawMotor;
   SparkMaxConfig sparkConfigCageClawMotor;
-
+  boolean clampOpen = false;
   AbsoluteEncoder clawEncoder;
-
-  boolean clawOpen = false;
 
   public CageClawSubSystem(int clampOpenCanId) {
 
     cageClawMotor = new SparkMax(clampOpenCanId, SparkMax.MotorType.kBrushed);
 
     sparkConfigCageClawMotor = new SparkMaxConfig();
-    
+
     clawEncoder = cageClawMotor.getAbsoluteEncoder();
 
     sparkConfigCageClawMotor
@@ -37,26 +35,33 @@ public class CageClawSubSystem extends SubsystemBase {
   public void endClawMotors() {
     cageClawMotor.stopMotor();
   }
+// fix this does not work
+  public void clampControl(boolean yButton) {
+    if (yButton == true) {
+      clampOpen = !clampOpen;
+    }  // if open
 
-  public void clampControl() {
-      if (clawEncoder.getPosition() >= 60 * Math.PI / 180) {
-        clawOpen = false;
-      } else if (clawEncoder.getPosition() <= -60 * Math.PI / 180) {
-        clawOpen = true;
+    if (clampOpen == true) {
+      // if closed
+      if (clawEncoder.getPosition() <= 60 * Math.PI / 180) {
+        // move till open
+        cageClawMotor.setVoltage(6);
+      } else {
+        endClawMotors();
+        // when open stop moving
       }
-      if (clawOpen == true) {
-        if (clawEncoder.getPosition() >= -60 * Math.PI / 180) {
-          cageClawMotor.setVoltage(-6);
-        } else {
-          endClawMotors();
-        }
-      } else if (clawOpen == false) {
-        if (clawEncoder.getPosition() <= 60 * Math.PI / 180) {
-          cageClawMotor.setVoltage(6);
-        } else {
-          endClawMotors();
-        }
+    } else if (clampOpen == false) {
+      // if open
+      if (clawEncoder.getPosition() >= -60 * Math.PI / 180) {
+        // move till closed
+        cageClawMotor.setVoltage(-6);
+      } else {
+        // when closed stop moving
+        endClawMotors();
       }
+    } else {
+      endClawMotors();
+    }
   }
 
 }

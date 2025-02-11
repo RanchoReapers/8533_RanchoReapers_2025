@@ -17,11 +17,7 @@ public class armJoystickCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    if (RobotContainer.driverController.getXButton() == true) { 
-      armSubsystem.armControl2State();
-    }
-
+      armSubsystem.armControl2State(RobotContainer.driverController.getXButtonPressed());
   }
 
   @Override

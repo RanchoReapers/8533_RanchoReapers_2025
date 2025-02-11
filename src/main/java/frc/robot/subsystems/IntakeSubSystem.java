@@ -7,7 +7,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubSystem extends SubsystemBase {
-
+  boolean intakeOut = false;
   SparkMax intakeMotor;
 
   SparkMaxConfig sparkConfigIntakeMotor;
@@ -31,10 +31,12 @@ public class IntakeSubSystem extends SubsystemBase {
     intakeMotor.stopMotor();
   }
 
-  public void intakeControl(boolean bPress) {
-    bPress = !bPress;
-
-    if (bPress == true) {
+  public void intakeControl(boolean aPress) {
+    if (aPress == true) {
+    intakeOut = !intakeOut;
+    }
+    
+    if (intakeOut == true) {
       intakeMotor.setVoltage(-0.5);
     } else {
       intakeMotor.setVoltage(0.5);

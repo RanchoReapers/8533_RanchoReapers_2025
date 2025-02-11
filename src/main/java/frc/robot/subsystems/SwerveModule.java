@@ -10,7 +10,6 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.SparkClosedLoopController;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -81,7 +80,7 @@ public class SwerveModule {
         sparkConfigTurn.smartCurrentLimit(60, 60);
 
         driveMotor.configure(sparkConfigDrive, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        turnMotor.configure(sparkConfigDrive, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        turnMotor.configure(sparkConfigTurn, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         driveEncoder = driveMotor.getEncoder();
         turnEncoder = turnMotor.getEncoder();
@@ -95,8 +94,9 @@ public class SwerveModule {
         //turnEncoder.setVelocityConversionFacto r(ModuleConstants.kTurnEncoderRPM2RadPerSec);
 
         //turnPidController = new PIDController(0.06, 0.15, 0);
-        turnPidController = new PIDController(0.05, 0.09, 0.005);
-        //best ^
+        //turnPidController = new PIDController(0.05, 0.09, 0.005);
+        turnPidController = new PIDController(0.37, 0, 0);
+        //best ^   
         turnPidController.enableContinuousInput(-Math.PI, Math.PI);
     
         resetEncoders();
@@ -148,7 +148,6 @@ public class SwerveModule {
         }
 
         correctedSwerveModuleState.optimize(getState().angle);
-        //state = SwerveModuleState.optimize(state, getState().angle);
         driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
         turnMotor.set(turnPidController.calculate(getAbsoluteEncoderRad(), state.angle.getRadians()));
         // turnMotor.set(turnPidController.calculate(getTurningPosition(),

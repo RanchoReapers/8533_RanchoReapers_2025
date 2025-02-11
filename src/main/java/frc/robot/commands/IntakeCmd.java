@@ -17,7 +17,7 @@ public class IntakeCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intakeSubSystem.intakeControl(RobotContainer.driverController.getBButton());
+    intakeSubSystem.intakeControl(RobotContainer.driverController.getAButtonPressed());
   }
 
   // Called once the command ends or is interrupted.
