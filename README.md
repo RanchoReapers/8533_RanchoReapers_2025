@@ -1,3 +1,4 @@
+![2025 FRC REEFSCAPE Controller Layout - 8533RR](https://github.com/user-attachments/assets/337cc4f3-3377-44b8-8f25-817e9f8147bc)
 logic for aim assist -- please enter edit mode to read the code below easier:
 ----
 
@@ -66,8 +67,6 @@ SET aimAssistActive <- False
   }
 startCooldown
 }
-
-
 
 PLEASE NOTE: to implement aim assist the steps are:
 1a) auto activate when by reef & coral pickup OR 1b) auto activate when by coral pickup and **require a controller press to activate** when by reef (since when by reef the driver may just want to remove algae, and the aim assist will be a nuisance. NOTE THAT 1B SHOULD ONLY BE IMPLEMENTED IF THE ROBOT IS DESIGNED TO ALSO REMOVE ALGAE, OTHERWISE IMPLEMENT 1A!!!
