@@ -1,15 +1,3 @@
-
-
-
-
-Need to add:
-Motor in middle of arm (claw to grab onto cage and release)  -- both directions (1 sparkMAX)
-
-1 motor to control the rollers at the front of arm (1 sparkMAX)
-
-(possibly 2)
-
-
 logic for aim assist -- please enter edit mode to read the code below easier:
 ----
 
