@@ -1,4 +1,14 @@
+Controls
+----
 ![2025 FRC REEFSCAPE Controller Layout - 8533RR](https://github.com/user-attachments/assets/337cc4f3-3377-44b8-8f25-817e9f8147bc)
+
+
+
+
+
+
+
+
 logic for aim assist -- please enter edit mode to read the code below easier:
 ----
 
