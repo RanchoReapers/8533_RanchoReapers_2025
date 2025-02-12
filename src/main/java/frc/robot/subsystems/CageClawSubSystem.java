@@ -24,7 +24,7 @@ public class CageClawSubSystem extends SubsystemBase {
 
     sparkConfigCageClawMotor
         .idleMode(IdleMode.kBrake)
-        .inverted(true);
+        .inverted(false);
     sparkConfigCageClawMotor.encoder
         .positionConversionFactor(Math.PI * 2)
         .velocityConversionFactor(Math.PI * 2);
