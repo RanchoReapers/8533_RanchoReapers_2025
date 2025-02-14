@@ -1,14 +1,14 @@
-package frc.robot.commands;
-
+/*
+ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.CageClawSubSystem;
+import frc.robot.subsystems.LimelightDetectionSubSystem;
 
-public class CageClawCmd extends Command {
-    CageClawSubSystem cageClawSubSystem;
-    public CageClawCmd(CageClawSubSystem cageClawSubsystem) {
-        cageClawSubSystem = cageClawSubsystem;
-        addRequirements(cageClawSubSystem);
+public class LimelightDetectionCmd extends Command {
+    LimelightDetectionSubSystem limelightDetectionSubSystem;
+    public LimelightDetectionCmd(LimelightDetectionSubSystem limelightDetectionSubSystem) {
+        this.limelightDetectionSubSystem = limelightDetectionSubSystem;
+        addRequirements(limelightDetectionSubSystem);
     }
     // Called when the command is initially scheduled.
   @Override
@@ -17,13 +17,11 @@ public class CageClawCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      cageClawSubSystem.clampControl(RobotContainer.driverController.getYButtonPressed());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    cageClawSubSystem.endClawMotors(); // stop motors once interrupted
   }
 
   // Returns true when the command should end.
@@ -32,3 +30,4 @@ public class CageClawCmd extends Command {
     return false;
   }
 }
+*/

@@ -1,5 +1,10 @@
 Team 8533 Robot Code Documentation - FRC REEFSCAPE 2024
 ----
+Configure SparkMAX for claw & arms (set zero) -- then test
+^^^ TRANSITIONED TO CONSTANTS MODEL, CHECK VOLTAGE VALUES BEFORE TESTING!!!!!
+Translate aim assist code from tank to swerve
+Find docs for function getPressed -- not updating fast enough??
+
 
 Controls
 ----

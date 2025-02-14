@@ -12,7 +12,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.RobotContainer;
 
 public class SwerveSubSystem extends SubsystemBase {
     private final SwerveModule frontLeft = new SwerveModule(
@@ -121,14 +120,10 @@ public class SwerveSubSystem extends SubsystemBase {
         });
         
         SmartDashboard.putNumber("Robot Heading", getHeading());
-        //SmartDashboard.putNumber("Front Left Turn Angle", frontLeft.getAbsoluteEncoderRad());
-        //SmartDashboard.putNumber("Back Left Turn Angle", backLeft.getAbsoluteEncoderRad());
-        //SmartDashboard.putNumber("Front Right Turn Angle", frontRight.getAbsoluteEncoderRad());
-        //SmartDashboard.putNumber("Back Right Turn Angle", backRight.getAbsoluteEncoderRad());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
-        if (RobotContainer.driverController.getBButton()){
+        /*if (RobotContainer.driverController.getBButton()){
             zeroHeading();
-        }
+        } */
     }
 
     public void disabledPeriodic() {
@@ -145,9 +140,7 @@ public class SwerveSubSystem extends SubsystemBase {
         SmartDashboard.putNumber("Back Right Cancoder Angle", backRight.getAbsoluteEncoderRad() / Math.PI *180);
 
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
-        if (RobotContainer.driverController.getBButton()){
-            zeroHeading();
-        }
+
     }
 
     public void stopModules() {

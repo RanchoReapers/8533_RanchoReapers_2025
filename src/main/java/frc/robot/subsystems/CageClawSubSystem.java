@@ -1,22 +1,30 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.CageClawConstants;
 
 public class CageClawSubSystem extends SubsystemBase {
 
   SparkMax cageClawMotor;
   SparkMaxConfig sparkConfigCageClawMotor;
-  boolean clampOpen = false;
+
   AbsoluteEncoder clawEncoder;
+
+  boolean clawOpen = false;
+  // lockouts to prevent user switching arm state too often
+  boolean clawInUseOpen = false; // Arm is currently being used to move open
+  boolean clawInUseClosed = true; // Arm is currently being used to move closed
 
   public CageClawSubSystem(int clampOpenCanId) {
 
-    cageClawMotor = new SparkMax(clampOpenCanId, SparkMax.MotorType.kBrushed);
+    cageClawMotor = new SparkMax(clampOpenCanId, SparkMax.MotorType.kBrushless);
 
     sparkConfigCageClawMotor = new SparkMaxConfig();
 
@@ -30,33 +38,29 @@ public class CageClawSubSystem extends SubsystemBase {
         .velocityConversionFactor(Math.PI * 2);
     sparkConfigCageClawMotor.smartCurrentLimit(60, 60);
 
+    cageClawMotor.configure(sparkConfigCageClawMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
   }
 
   public void endClawMotors() {
     cageClawMotor.stopMotor();
   }
-// fix this does not work
+
+  // fix this does not work
   public void clampControl(boolean yButton) {
     if (yButton == true) {
-      clampOpen = !clampOpen;
-    }  // if open
-
-    if (clampOpen == true) {
-      // if closed
-      if (clawEncoder.getPosition() <= 60 * Math.PI / 180) {
-        // move till open
-        cageClawMotor.setVoltage(6);
+      clawOpen = !clawOpen;
+    } 
+    if (clawOpen == true && clawInUseOpen == false) {
+      if (clawEncoder.getPosition() <= CageClawConstants.CageClawTravelAngle * Math.PI / 180) {
+        cageClawMotor.setVoltage(-CageClawConstants.CageClawVoltage);
       } else {
         endClawMotors();
-        // when open stop moving
       }
-    } else if (clampOpen == false) {
-      // if open
-      if (clawEncoder.getPosition() >= -60 * Math.PI / 180) {
-        // move till closed
-        cageClawMotor.setVoltage(-6);
+    } else if (clawOpen == false && clawInUseClosed == true) {
+      if (clawEncoder.getPosition() >= -CageClawConstants.CageClawTravelAngle * Math.PI / 180) {
+        cageClawMotor.setVoltage(CageClawConstants.CageClawVoltage);
       } else {
-        // when closed stop moving
         endClawMotors();
       }
     } else {

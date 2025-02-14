@@ -1,29 +1,33 @@
-
 package frc.robot;
-
-//import edu.wpi.first.math.geometry.Rotation2d;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-
-/**
- * The Constants class provides a convenient place for teams to hold robot-wide
- * numerical or boolean
- * constants. This class should not be used for any other purpose. All constants
- * should be declared
- * globally (i.e. public static). Do not put anything functional in this class.
- *
- * <p>
- * It is advised to statically import this class (or one of its inner classes)
- * wherever the
- * constants are needed, to reduce verbosity.
- */
 public final class Constants {
 
-    // ANCHOR - THIS PART OF THE CODE IS IMPORTANT AS IT MAY NEED TO CHANGE INTEGERS
-    // IF YOU CHANGE CONTROLLERS, WE ARE USING AN XBOX AS OF TESTING
+    public final class LimelightConstants {
+        public static final double KpAim = -0.1f;
+        public static final double KpDistance = -0.1f;
+        public static final double MinAimCommand = 0.05f;
+    }
+
+    /* READ -- Cage Claw set to 0 for Arm testing purposes & safety, 
+    once you are sure that Arm works properly, set Cage Claw voltage to 0.5 volts and arm to 0,
+    once sure that Cage Claw works properly, test to find proper voltages for each. */
+    public final class ArmConstants {
+        public static final double ArmVoltage = 0.5;
+    }
+
+    public final class CageClawConstants {
+        public static final double CageClawVoltage = 0;
+        public static final double CageClawTravelAngle = 30;
+    }
+
+    public final class IntakeConstants {
+        public static final double IntakeVoltage = 3;
+    }
+
     public final class USB {
         public static final int DRIVER_CONTROLLER = 0; // Driver Controller USB ID
         public static final int OPERATOR_CONTROLLER = 1; // Operator controller USB ID
@@ -35,49 +39,6 @@ public final class Constants {
         public static final int OPERATOR_LT = 2;
     }
 
-    // SECTION - IGNORE FOR NOW
-    // NOTE - IGNORE THIS CODE FOR NOW UNLESS NEEDED FOR THE FUTURE!
-    /*
-     * 
-     * public final class WRIST{
-     * public static final int ID = 12;
-     * public static final double MAX_SPEED_UP = 0.3;
-     * public static final double MAX_SPEED_DOWN = 0.2;
-     * public static final double POSITION_TOLERANCE = 0.05;
-     * public static final double UP_POSITION = -9;
-     * public static final double DOWN_POSITION = 0;
-     * 
-     * public static final double kP = 0;
-     * public static final double kI = 0;
-     * public static final double kD = 0;
-     * }
-     * 
-     * public final class ELBOW{
-     * public static final int ID = 11;
-     * public static final boolean INVERTED = false;
-     * public static final double MAX_SPEED = 0.2;
-     * public static final double POSITION_TOLERANCE = 0.05;
-     * public static final double UP_POSITION = -9;
-     * public static final double DOWN_POSITION = 0;
-     * 
-     * public static final double kP = 0;
-     * public static final double kI = 0;
-     * public static final double kD = 0;
-     * }
-     * 
-     * public final class SHOULDER{
-     * public static final int LEFT = 9;
-     * public static final int RIGHT = 10;
-     * public static final boolean LEFT_INVERTED = false;
-     * public static final boolean RIGHT_INVERTED = true;
-     * public static final double MAX_SPEED = 0.2;
-     * 
-     * public static final double kP = 0.09;
-     * public static final double kI = 0.1;
-     * public static final double kD = 0.03;
-     * }
-     */
-    // !SECTION
     public final class ModuleConstants {
         public static final double kWheelDiameterMeters = 0.10;
         public static final double kDriveMotorGearRatio = 1 / 6.75;
@@ -96,69 +57,38 @@ public final class Constants {
     public static final class DriveConstants {
         // SECTION - BASE WXH
         // NOTE - THIS PART OF THE CODE CAN CHANGE DEPENDING ON IF THE BASE IS CHANGED!
-        public static final double kTrackWidth = Units.inchesToMeters(20.5); // was 18.5
+        public static final double kTrackWidth = Units.inchesToMeters(20.5);
         // Distance between right and left wheels
 
-        public static final double kWheelBase = Units.inchesToMeters(20.5); // was 30.75
+        public static final double kWheelBase = Units.inchesToMeters(20.5);
         // Distance between front and back wheels
-        // !SECTION
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-                // REVIEW - THIS IS THE NEW VERSION OF THE CODE, COMMENT THIS OUT IF REVERTING
-                // TO THE OLD ONE
+
                 new Translation2d(kWheelBase / 2, kTrackWidth / 2),
                 new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
                 new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
                 new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
-        // REVIEW - THIS IS THE OLD VERSION OF THE CODE, COMMENT THIS OUT IF REVERTING
-        // TO THE NEW ONE
-        // new Translation2d(kTrackWidth / 2, kWheelBase / 2),
-        // new Translation2d(kTrackWidth / 2, -kWheelBase / 2),
-        // new Translation2d(-kTrackWidth / 2, kWheelBase / 2),
-        // new Translation2d(-kTrackWidth / 2, -kWheelBase / 2));
-        // SECTION - Motor ports
-        // NOTE - DO NOT CHANGE! INTEGERS ARE THE IMPORTS FOR EACH MOTOR
-        // NOTE - THIS IS THE FRONT DRIVE MOTOR PORTS
+        // FRONT DRIVE MOTOR PORTS
         public static final int kFrontLeftDriveMotorPort = 4;
         public static final int kFrontLeftTurningMotorPort = 5;
 
-        // NOTE - THIS IS THE FRONT TURNING MOTOR PORTS
+        // FRONT TURNING
         public static final int kFrontRightDriveMotorPort = 7;
         public static final int kFrontRightTurningMotorPort = 6;
 
-        // NOTE - THIS IS THE BACK DRIVE MOTOR PORTS
+        // BACK DRIVE
         public static final int kBackLeftDriveMotorPort = 3;
         public static final int kBackLeftTurningMotorPort = 2;
 
-        // NOTE - THIS IS THE BACK TURNING MOTOR PORTS
+        // BACK TURNING
         public static final int kBackRightDriveMotorPort = 9;
         public static final int kBackRightTurningMotorPort = 8;
-        // !SECTION
 
-        // SECTION - Turning & Drive reverse values
-        // NOTE - THIS IS THE FRONT TURNING ENCODER REVERSE VALUES
-        // REVIEW - WE MAY NEED TO ALTER SOME CODE, MAKE SURE TO REVERT BACK TO THE
-        // OTHER VALUES IF CHANGED AND IT GETS WORSE!
-        // public static final boolean kFrontLeftTurningEncoderReversed = true;
-        // public static final boolean kFrontRightTurningEncoderReversed = true;
-
-        // //NOTE - THIS IS THE BACK TURNING ENCODER REVERSE VALUES
-        // public static final boolean kBackLeftTurningEncoderReversed = true;
-        // public static final boolean kBackRightTurningEncoderReversed = true;
-
-        // DELETE THIS IF NO WORK UNCOMMENT WORK ABOVE
-        public static final boolean kFrontLeftTurningEncoderReversed = false;
-        public static final boolean kFrontRightTurningEncoderReversed = false;
-        public static final boolean kBackLeftTurningEncoderReversed = false;
-        public static final boolean kBackRightTurningEncoderReversed = false;
-
-        // NOTE - THIS IS THE FRONT DRIVE REVERSE VALUES
         public static final boolean kFrontLeftDriveReversed = true;
         public static final boolean kFrontRightDriveReversed = true; // was true
-        // NOTE - THIS IS THE BACK DRIVE REVERSE VALUES
         public static final boolean kBackLeftDriveReversed = true;
         public static final boolean kBackRightDriveReversed = true; // was true
-        // !SECTION
 
         // SECTION - ENCODER PORTS
         // NOTE - THIS IS THE ENCODER PORTS FOR THE DRIVE, IN NUMERICAL ORDER
@@ -166,61 +96,35 @@ public final class Constants {
         public static final int kFrontRightDriveAbsoluteEncoderPort = 10;
         public static final int kFrontLeftDriveAbsoluteEncoderPort = 11;
         public static final int kBackLeftDriveAbsoluteEncoderPort = 12;
+
+        public static final boolean kFrontLeftTurningEncoderReversed = false;
+        public static final boolean kFrontRightTurningEncoderReversed = false;
+        public static final boolean kBackLeftTurningEncoderReversed = false;
+        public static final boolean kBackRightTurningEncoderReversed = false;
         // !SECTION
 
-        // SECTION - ABS Drive Encoder Reverse values
-        // NOTE - THIS IS THE FRONT ABSOLUTE DRIVE ENCODER REVERSED
-        // public static final boolean kFrontLeftDriveAbsoluteEncoderReversed = true;
-        // public static final boolean kFrontRightDriveAbsoluteEncoderReversed = true;
-
-        // //NOTE - THIS IS THE BACK ABSOLUTE DRIVE ENCODER REVERSED
-        // public static final boolean kBackLeftDriveAbsoluteEncoderReversed = true;
-        // public static final boolean kBackRightDriveAbsoluteEncoderReversed = true;
-
-        // IF NO WORK DELETE AND UNCOMMENT CODE ABOVE
-        public static final boolean kFrontLeftDriveAbsoluteEncoderReversed = true; // was false -  2/8/25
+        public static final boolean kFrontLeftDriveAbsoluteEncoderReversed = true;
         public static final boolean kFrontRightDriveAbsoluteEncoderReversed = true;
         public static final boolean kBackLeftDriveAbsoluteEncoderReversed = true;
         public static final boolean kBackRightDriveAbsoluteEncoderReversed = true;
         // !SECTION
 
         // SECTION - OFFSET VALUES
-        // NOTE - THESE OFFSET VALUES ALL SEEM TO WORK, DON'T CHANGE UNLESS TOLD TO!
 
-        /*
-         * public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = 0.150635
-         * * Math.PI * 2;
-         * //back left ^
-         * public static final double kFrontRightDriveAbsoluteEncoderOffsetRad =
-         * -0.376221 * Math.PI * 2;
-         * //front right ^
-         * public static final double kBackRightDriveAbsoluteEncoderOffsetRad =
-         * -0.455566 * Math.PI * 2;
-         * // back right ^
-         * public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad =
-         * -0.449951 * Math.PI * 2;
-         * // front left ^
-         * //!SECTION
-         * 
-         * // uncomment if this does not fix the motors
-         */
-
-        public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = 0.409668 - (-0.45725); 
+        public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = 0.409668 - (-0.45725);
         // back left ^
         public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = -0.127686 - (-0.494500);
         // front right ^
         public static final double kBackRightDriveAbsoluteEncoderOffsetRad = -0.375 - 0.165039;
         // back right ^
-        public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = -0.33000 - 0.236572; 
+        public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = -0.33000 - 0.236572;
         // front left ^
 
         // CHASSIS OFFSET REFERENCE
-        public static final double kBackLeftDriveChassisOffset = 60 * Math.PI / 180; 
+        public static final double kBackLeftDriveChassisOffset = 60 * Math.PI / 180;
         public static final double kFrontRightDriveChassisOffset = 120 * Math.PI / 180;
         public static final double kBackRightDriveChassisOffset = 110 * Math.PI / 180;
         public static final double kFrontLeftDriveChassisOffset = 45 * Math.PI / 180;
-
-
 
         public static final double kPhysicalMaxSpeedMetersPerSecond = 4.4;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;

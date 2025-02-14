@@ -4,9 +4,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.ArmSubSystem;
 
-public class armJoystickCmd extends Command {
+public class ArmJoystickCmd extends Command {
     ArmSubSystem armSubsystem;
-    public armJoystickCmd(ArmSubSystem armSubSystem) {
+    public ArmJoystickCmd(ArmSubSystem armSubSystem) {
         armSubsystem = armSubSystem;
         addRequirements(armSubSystem);
     }

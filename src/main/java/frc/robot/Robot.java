@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.ArmSubSystem;
 import frc.robot.subsystems.LimelightDetectionSubSystem;
 
 /**
@@ -23,6 +24,7 @@ public class Robot extends TimedRobot {
     private RobotContainer m_robotContainer;
 
 LimelightDetectionSubSystem limelightDetectionSubSystem = new LimelightDetectionSubSystem();
+ArmSubSystem armSubSystem = new ArmSubSystem(14,15);
 
 
     /**
@@ -60,6 +62,7 @@ LimelightDetectionSubSystem limelightDetectionSubSystem = new LimelightDetection
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
         limelightDetectionSubSystem.periodicOdometry();
+        armSubSystem.periodicOdometry();
     }
 
     /** This function is called once each time the robot enters Disabled mode. */

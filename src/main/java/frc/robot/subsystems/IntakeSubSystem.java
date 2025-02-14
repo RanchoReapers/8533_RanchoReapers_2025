@@ -1,9 +1,8 @@
 package frc.robot.subsystems;
-
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-
+import frc.robot.Constants.IntakeConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubSystem extends SubsystemBase {
@@ -13,7 +12,7 @@ public class IntakeSubSystem extends SubsystemBase {
   SparkMaxConfig sparkConfigIntakeMotor;
 
   public IntakeSubSystem(int intakeRollersCanId) {
-    intakeMotor = new SparkMax(intakeRollersCanId, SparkMax.MotorType.kBrushed);
+    intakeMotor = new SparkMax(intakeRollersCanId, SparkMax.MotorType.kBrushless);
 
     sparkConfigIntakeMotor = new SparkMaxConfig();
 
@@ -37,9 +36,9 @@ public class IntakeSubSystem extends SubsystemBase {
     }
     
     if (intakeOut == true) {
-      intakeMotor.setVoltage(-0.5);
+      intakeMotor.setVoltage(-IntakeConstants.IntakeVoltage);
     } else {
-      intakeMotor.setVoltage(0.5);
+      intakeMotor.setVoltage(IntakeConstants.IntakeVoltage);
     }
   }
 
