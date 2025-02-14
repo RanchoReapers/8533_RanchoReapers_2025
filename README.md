@@ -21,8 +21,7 @@ Controls
 logic for aim assist -- please enter edit mode to read the code below easier:
 ----
 
-when robot I![REVISION 1 -- 2025 FRC REEFSCAPE Controller Layout - 8533RR](https://github.com/user-attachments/assets/abdc3954-1901-4f2e-b999-0f6fa6900eb7)
-sEnabled {
+when robot IsEnabled {
 enableAimAssistLoop
 }
 
