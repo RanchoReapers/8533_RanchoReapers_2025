@@ -8,7 +8,8 @@ Find docs for function getPressed -- not updating fast enough??
 
 Controls
 ----
-![2025 FRC REEFSCAPE Controller Layout - 8533RR](https://github.com/user-attachments/assets/337cc4f3-3377-44b8-8f25-817e9f8147bc)
+![REVISION 1 -- 2025 FRC REEFSCAPE Controller Layout - 8533RR](https://github.com/user-attachments/assets/d10d7e39-8d24-4df8-80bb-e167bba0b169)
+
 
 
 
@@ -20,7 +21,8 @@ Controls
 logic for aim assist -- please enter edit mode to read the code below easier:
 ----
 
-when robot IsEnabled {
+when robot I![REVISION 1 -- 2025 FRC REEFSCAPE Controller Layout - 8533RR](https://github.com/user-attachments/assets/abdc3954-1901-4f2e-b999-0f6fa6900eb7)
+sEnabled {
 enableAimAssistLoop
 }
 
