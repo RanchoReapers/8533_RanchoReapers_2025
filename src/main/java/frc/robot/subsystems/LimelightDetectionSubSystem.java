@@ -20,6 +20,8 @@ public class LimelightDetectionSubSystem {
 
     }
 
+    // i havent looked at this entirely but pretty sure something is wrong here
+    // bButton is param or variable?
     public void initLockout(boolean bButton) {
         if (bButton == false) {
             aimLockout = false;
