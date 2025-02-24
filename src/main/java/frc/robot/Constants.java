@@ -16,7 +16,7 @@ public final class Constants {
     once you are sure that Arm works properly, set Cage Claw voltage to 0.5 volts and arm to 0,
     once sure that Cage Claw works properly, test to find proper voltages for each. */
     public final class ArmConstants {
-        public static final double ArmVoltage = 0.5;
+        public static final double ArmVoltage = 0.05;
     }
 
     public final class CageClawConstants {

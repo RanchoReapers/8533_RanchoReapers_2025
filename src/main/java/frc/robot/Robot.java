@@ -24,7 +24,7 @@ public class Robot extends TimedRobot {
     private RobotContainer m_robotContainer;
 
 LimelightDetectionSubSystem limelightDetectionSubSystem = new LimelightDetectionSubSystem();
-ArmSubSystem armSubSystem = new ArmSubSystem(14,15);
+// ArmSubSystem armSubSystem = new ArmSubSystem(14,15);
 
 
     /**
@@ -62,7 +62,7 @@ ArmSubSystem armSubSystem = new ArmSubSystem(14,15);
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
         limelightDetectionSubSystem.periodicOdometry();
-        armSubSystem.periodicOdometry();
+        // armSubSystem.periodicOdometry();
     }
 
     /** This function is called once each time the robot enters Disabled mode. */
