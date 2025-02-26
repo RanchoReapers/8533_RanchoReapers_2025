@@ -87,7 +87,7 @@ public class ArmSubSystem extends SubsystemBase {
     if (xButton == true) {
       armLow = !armLow;
     }
-    if (absolutePositionArmMotorLeft - absolutePositionArmMotorRight <= 5 * Math.PI / 180) {
+    if (Math.abs(absolutePositionArmMotorLeft) - Math.abs(absolutePositionArmMotorRight) <= 5 * Math.PI / 180) {
       if (armLow == true && armInUseDown == false) {
         if (absolutePositionArmMotorLeft >= 1 * Math.PI / 180) {
           armDriveLeft.setVoltage(-ArmConstants.ArmVoltage);
