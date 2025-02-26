@@ -3,7 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-//import frc.robot.Constants.LimelightConstants;
+import frc.robot.Constants.LimelightConstants;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 public class LimelightDetectionSubSystem {
@@ -33,17 +33,16 @@ public class LimelightDetectionSubSystem {
     }
 
     public void aimAssist(boolean bButton) {
-        if (aimLockout == false) {
             if (bButton == false && aimLockout == false) {
-                double heading_error = -tx;
-                double distance_error = -ty;
+                double heading_error = -tx; //right pos left neg
+                double distance_error = -ty; //up pos down neg
                 double steering_adjust = 0.0f;
 
         // tank drive -- rewrite for swerve
-        /*
-            if (tx > 1.0) {
+/*
+            if (tx > 1.0) { //if off to the right
                 steering_adjust = LimelightConstants.KpAim * heading_error - LimelightConstants.MinAimCommand;
-            } else if (tx < -1.0) {
+            } else if (tx < -1.0) { // if off to the left
                 steering_adjust = LimelightConstants.KpAim * heading_error + LimelightConstants.MinAimCommand;
             }
 
@@ -51,11 +50,11 @@ public class LimelightDetectionSubSystem {
 
             left_command += steering_adjust + distance_adjust;
             right_command -= steering_adjust + distance_adjust;
-        */
+*/
 
             }
         }
-    }
+
 
     public void periodicOdometry() {
 

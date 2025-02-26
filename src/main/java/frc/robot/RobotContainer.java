@@ -97,9 +97,15 @@ public class RobotContainer {
     public void disabledPeriodic() {
         //telemetry for debugging
         swerveSubsystem.disabledPeriodic();
+        armSubsystem.periodicOdometry();
         SmartDashboard.putBoolean("Joystick Arm State", driverController.getXButtonPressed());
         SmartDashboard.putBoolean("Joystick Claw State", driverController.getYButtonPressed());
         SmartDashboard.putBoolean("Joystick Intake State", driverController.getAButtonPressed());
+    }
+
+    public void disabledInit() {
+        RobotContainer.armSubsystem.saveArmAbsoluteMotorPositions();
+        RobotContainer.cageClawSubsystem.saveClawAbsoluteMotorPositions();
     }
     
 }

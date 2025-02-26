@@ -1,12 +1,13 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.revrobotics.RelativeEncoder;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CageClawConstants;
 
@@ -15,12 +16,18 @@ public class CageClawSubSystem extends SubsystemBase {
   SparkMax cageClawMotor;
   SparkMaxConfig sparkConfigCageClawMotor;
 
-  AbsoluteEncoder clawEncoder;
+  RelativeEncoder RELclawEncoder;
 
   boolean clawOpen = false;
   // lockouts to prevent user switching arm state too often
   boolean clawInUseOpen = false; // Arm is currently being used to move open
-  boolean clawInUseClosed = true; // Arm is currently being used to move closed
+  boolean clawInUseClosed = false; // Arm is currently being used to move closed
+
+  double absolutePositionClawMotor;
+  // defines the deviation of motors using the relative encoder acting as an absolute encoder
+
+  private static final String PREF_KEY_CLAW_MOTOR = "ClawMotorAbsolutePosition";
+  // preferences keys for saving absolute motor positions in memory
 
   public CageClawSubSystem(int clampOpenCanId) {
 
@@ -28,7 +35,9 @@ public class CageClawSubSystem extends SubsystemBase {
 
     sparkConfigCageClawMotor = new SparkMaxConfig();
 
-    clawEncoder = cageClawMotor.getAbsoluteEncoder();
+    RELclawEncoder = cageClawMotor.getEncoder();
+
+    absolutePositionClawMotor = Preferences.getDouble(PREF_KEY_CLAW_MOTOR, 0.0);
 
     sparkConfigCageClawMotor
         .idleMode(IdleMode.kBrake)
@@ -42,23 +51,29 @@ public class CageClawSubSystem extends SubsystemBase {
 
   }
 
+  public void updateClawAbsolutePosition() {
+    absolutePositionClawMotor += RELclawEncoder.getPosition();
+
+    RELclawEncoder.setPosition(0.0);
+    //reset encoders to 0 after reading
+  }
+
   public void endClawMotors() {
     cageClawMotor.stopMotor();
   }
 
-  // fix this does not work
   public void clampControl(boolean yButton) {
     if (yButton == true) {
       clawOpen = !clawOpen;
     } 
     if (clawOpen == true && clawInUseOpen == false) {
-      if (clawEncoder.getPosition() <= CageClawConstants.CageClawTravelAngle * Math.PI / 180) {
+      if (absolutePositionClawMotor <= CageClawConstants.CageClawTravelAngle * Math.PI / 180) {
         cageClawMotor.setVoltage(-CageClawConstants.CageClawVoltage);
       } else {
         endClawMotors();
       }
     } else if (clawOpen == false && clawInUseClosed == true) {
-      if (clawEncoder.getPosition() >= -CageClawConstants.CageClawTravelAngle * Math.PI / 180) {
+      if (absolutePositionClawMotor >= -CageClawConstants.CageClawTravelAngle * Math.PI / 180) {
         cageClawMotor.setVoltage(CageClawConstants.CageClawVoltage);
       } else {
         endClawMotors();
@@ -66,6 +81,24 @@ public class CageClawSubSystem extends SubsystemBase {
     } else {
       endClawMotors();
     }
+  }
+
+  public void saveClawAbsoluteMotorPositions() {
+    Preferences.setDouble(PREF_KEY_CLAW_MOTOR, absolutePositionClawMotor);
+  }
+
+  public void periodicOdometry() {
+
+    updateClawAbsolutePosition();
+
+    // post to smart dashboard periodically
+    SmartDashboard.putBoolean("clawOpen", clawOpen);
+    SmartDashboard.putBoolean("clawInUseOpen", clawInUseOpen);
+    SmartDashboard.putBoolean("clawInUseClosed", clawInUseClosed);
+
+    // Arm debug
+    SmartDashboard.putNumber("SPARK-REL CLAW motor position", RELclawEncoder.getPosition() * 180/Math.PI);
+    SmartDashboard.putNumber("CONV-ABS CLAW motor position", absolutePositionClawMotor * 180/Math.PI);
   }
 
 }
