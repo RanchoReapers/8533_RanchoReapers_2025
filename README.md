@@ -1,9 +1,18 @@
 Team 8533 Robot Code Documentation - FRC REEFSCAPE 2024
 ----
-Configure SparkMAX for claw & arms (set zero) -- then test
-^^^ TRANSITIONED TO CONSTANTS MODEL, CHECK VOLTAGE VALUES BEFORE TESTING!!!!!
-Translate aim assist code from tank to swerve
-Find docs for function getPressed -- not updating fast enough??
+
+
+TODOS
+----
+(In order of importance)
+- Have Mechanical fix arm and claw -- then mount to robot. IMPORTANT THAT CLAW AND ARM ARE SET TO DESIRED '0' POSITION BEFORE ATTACHMENT!!!!
+- After arm mounted, have Electrical mount all components and SparkMAXes to base. Need to get robot legal & competition ready.
+- Modify arm, intake, and claw code to use the Trigger functionality for calling in commands (WPILib docs)
+    - Deploy new arm & claw code. Test arm, then test claw.
+- For the 2 nested steps, first learn how to simulate a controller
+    - Write code for autonomous mode using a controller simulation
+    - Translate aim assist code from tank to swerve
+- Implement pathing to autonomous and aim assist using Choreo
 
 
 Controls
@@ -11,16 +20,8 @@ Controls
 ![REVISION 1 -- 2025 FRC REEFSCAPE Controller Layout - 8533RR](https://github.com/user-attachments/assets/d10d7e39-8d24-4df8-80bb-e167bba0b169)
 
 
-
-
-
-
-
-
-
 logic for aim assist -- please enter edit mode to read the code below easier:
 ----
-
 when robot IsEnabled {
 enableAimAssistLoop
 }
@@ -88,7 +89,7 @@ startCooldown
 }
 
 PLEASE NOTE: to implement aim assist the steps are:
-1a) auto activate when by reef & coral pickup OR 1b) auto activate when by coral pickup and **require a controller press to activate** when by reef (since when by reef the driver may just want to remove algae, and the aim assist will be a nuisance. NOTE THAT 1B SHOULD ONLY BE IMPLEMENTED IF THE ROBOT IS DESIGNED TO ALSO REMOVE ALGAE, OTHERWISE IMPLEMENT 1A!!!
+1) auto activate when by reef & coral pickup
 2) deactivate aim assist when a key on the controller is pressed and have a cooldown (like 5 ish seconds -- enough to allow the driver to move out of auto activation range) before aim assist can auto reactivate itself
 
 

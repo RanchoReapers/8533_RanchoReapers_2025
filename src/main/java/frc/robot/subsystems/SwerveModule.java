@@ -18,8 +18,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 
-
-
 public class SwerveModule {
 
     private final SparkMax driveMotor;
@@ -93,10 +91,8 @@ public class SwerveModule {
         //turnEncoder.setPositionConversionFactor(ModuleConstants.kTurnEncoderRot2Rad);
         //turnEncoder.setVelocityConversionFacto r(ModuleConstants.kTurnEncoderRPM2RadPerSec);
 
-        //turnPidController = new PIDController(0.06, 0.15, 0);
-        //turnPidController = new PIDController(0.05, 0.09, 0.005);
+    
         turnPidController = new PIDController(0.37, 0, 0);
-        //best ^   
         turnPidController.enableContinuousInput(-Math.PI, Math.PI);
     
         resetEncoders();
@@ -155,8 +151,6 @@ public class SwerveModule {
     }
 
     public void stop() {
-        //driveMotor.setIdleMode(IdleMode.kBrake);
-        //turnMotor.setIdleMode(IdleMode.kBrake);
         driveMotor.set(0);
         turnMotor.set(0);
     }
