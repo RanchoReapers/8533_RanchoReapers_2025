@@ -14,6 +14,18 @@ TODOS
     - Write code for autonomous mode using a controller simulation
     - Translate aim assist code from tank to swerve
 - Implement pathing to autonomous and aim assist using Choreo
+- Setup Elastic as a dashboard
+
+
+What's Happening?
+----
+- Mechanical is fixing the arm
+- Bumpers are being made
+- While waiting for Mechanical to finish the arm on Friday, work on the following:
+    - Let the bumper team use the robot while setting up Elastic -- MAKE SURE THE ROBOT IS POWERED ON WHILE THEY ARE WORKING ON IT SO THAT THE WIFI CAN BE ACCESSED
+        - UNDER NO CIRCUMSTANCES SHOULD THE ROBOT BE ENABLED!!!!! This will screw up the absoluteEncoder variables. Wait until the arm is installed properly to enable.
+        - To setup elastic and have the new variables be recognized, deploy the code to the robot. Just remember -- DONT ENABLE IT!!!!
+    - The claw will not be fixed -- we need to restructure the claw subsystem so that when "open", it is powered until it would fold in on itself and then sent back to the starting position. This way, power is always being applied. Use a low voltage.
 
 
 Controls
