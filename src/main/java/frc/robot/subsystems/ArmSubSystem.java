@@ -27,6 +27,8 @@ public class ArmSubSystem extends SubsystemBase {
   boolean armInUseUp = false; // Arm is currently being used to move upwards
   boolean armInUseDown = false; // Arm is currently being used to move downwards
 
+  boolean xButtonLockoutVar = false; // prevents user from switching arm state too often
+
   double absolutePositionArmMotorLeft;
   double absolutePositionArmMotorRight;
   // defines the deviation of motors using the relative encoder acting as an absolute encoder
@@ -83,13 +85,19 @@ public class ArmSubSystem extends SubsystemBase {
     armDriveRight.stopMotor();
   }
 
+  public void xButtonLockoutFunc() {
+    xButtonLockoutVar = true;
+    
+  }
+
   public void armControl2State(boolean xButton) {
     if (xButton == true) {
       armLow = !armLow;
     }
+    // set the number of degrees to be one lower/higher depending on direction for movement to allow for stopping time
     if (Math.abs(absolutePositionArmMotorLeft) - Math.abs(absolutePositionArmMotorRight) <= 5 * Math.PI / 180) {
       if (armLow == true && armInUseDown == false) {
-        if (absolutePositionArmMotorLeft >= 1 * Math.PI / 180) {
+        if (absolutePositionArmMotorLeft >= 10.7 * Math.PI / 180) { //higher
           armDriveLeft.setVoltage(-ArmConstants.ArmVoltage);
           armDriveRight.setVoltage(-ArmConstants.ArmVoltage);
           armInUseUp = true;
@@ -98,7 +106,7 @@ public class ArmSubSystem extends SubsystemBase {
           armInUseUp = false;
         }
       } else if (armLow == false && armInUseUp == false) {
-        if (absolutePositionArmMotorLeft <= 29 * Math.PI / 180) {
+        if (absolutePositionArmMotorLeft <= 96.3 * Math.PI / 180) { //lower
           armDriveLeft.setVoltage(ArmConstants.ArmVoltage);
           armDriveRight.setVoltage(ArmConstants.ArmVoltage);
           armInUseDown = true;

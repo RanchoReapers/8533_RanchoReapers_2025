@@ -43,8 +43,8 @@ public class CageClawSubSystem extends SubsystemBase {
         .idleMode(IdleMode.kBrake)
         .inverted(false);
     sparkConfigCageClawMotor.encoder
-        .positionConversionFactor(Math.PI * 2)
-        .velocityConversionFactor(Math.PI * 2);
+        .positionConversionFactor(0.0133333 * Math.PI * 2)
+        .velocityConversionFactor(0.0133333 * Math.PI * 2);
     sparkConfigCageClawMotor.smartCurrentLimit(60, 60);
 
     cageClawMotor.configure(sparkConfigCageClawMotor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);

@@ -9,6 +9,7 @@ TODOS
 - After arm mounted, have Electrical mount all components and SparkMAXes to base. Need to get robot legal & competition ready.
 - Modify arm, intake, and claw code to use the Trigger functionality for calling in commands (WPILib docs)
     - Deploy new arm & claw code. Test arm, then test claw.
+- Change the way that the claw works to be constantly powered in a direction (low voltage)
 - For the 2 nested steps, first learn how to simulate a controller
     - Write code for autonomous mode using a controller simulation
     - Translate aim assist code from tank to swerve

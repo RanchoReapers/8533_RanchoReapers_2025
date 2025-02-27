@@ -20,8 +20,8 @@ public class IntakeSubSystem extends SubsystemBase {
         .idleMode(IdleMode.kBrake)
         .inverted(true);
     sparkConfigIntakeMotor.encoder
-        .positionConversionFactor(Math.PI * 2)
-        .velocityConversionFactor(Math.PI * 2);
+        .positionConversionFactor(0.037037037 * Math.PI * 2)
+        .velocityConversionFactor(0.037037037 * Math.PI * 2);
     sparkConfigIntakeMotor.smartCurrentLimit(60, 60);
 
   }

@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -38,6 +40,9 @@ public class RobotContainer {
   public final static IntakeSubSystem intakeSubsystem = new IntakeSubSystem(17);
   public final static XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
   public final static XboxController operatorController = new XboxController(USB.OPERATOR_CONTROLLER);
+  
+  public final static Trigger xButton = new JoystickButton(driverController, XboxController.Button.kX.value);
+
 
   // contains subsystems, OI devices, and commands
   public RobotContainer() {
@@ -101,6 +106,11 @@ public class RobotContainer {
         SmartDashboard.putBoolean("Joystick Arm State", driverController.getXButtonPressed());
         SmartDashboard.putBoolean("Joystick Claw State", driverController.getYButtonPressed());
         SmartDashboard.putBoolean("Joystick Intake State", driverController.getAButtonPressed());
+    }
+
+    public void enabledInit() {
+        RobotContainer.armSubsystem.updateArmAbsolutePosition();
+        RobotContainer.cageClawSubsystem.updateClawAbsolutePosition();
     }
 
     public void disabledInit() {
