@@ -27,8 +27,6 @@ public class ArmSubSystem extends SubsystemBase {
   boolean armInUseUp = false; // Arm is currently being used to move upwards
   boolean armInUseDown = false; // Arm is currently being used to move downwards
 
-  boolean xButtonLockoutVar = false; // prevents user from switching arm state too often
-
   double absolutePositionArmMotorLeft;
   double absolutePositionArmMotorRight;
   // defines the deviation of motors using the relative encoder acting as an absolute encoder
@@ -85,11 +83,6 @@ public class ArmSubSystem extends SubsystemBase {
     armDriveRight.stopMotor();
   }
 
-  public void xButtonLockoutFunc() {
-    xButtonLockoutVar = true;
-    
-  }
-
   public void armControl2State(boolean xButton) {
     if (xButton == true) {
       armLow = !armLow;
@@ -97,7 +90,7 @@ public class ArmSubSystem extends SubsystemBase {
     // set the number of degrees to be one lower/higher depending on direction for movement to allow for stopping time
     if (Math.abs(absolutePositionArmMotorLeft) - Math.abs(absolutePositionArmMotorRight) <= 5 * Math.PI / 180) {
       if (armLow == true && armInUseDown == false) {
-        if (absolputePositionArmMotorLeft >= 10.7 * Math.PI / 180) { // higher -- NOTE THAT 10.7 IS A PLACEHOLDER USE THE FORMULA ONCE YOU MEASURE THE ARM
+        if (absolutePositionArmMotorLeft >= 10.7 * Math.PI / 180) { // higher -- NOTE THAT 10.7 IS A PLACEHOLDER USE THE FORMULA ONCE YOU MEASURE THE ARM
           armDriveLeft.setVoltage(-ArmConstants.ArmVoltage);
           armDriveRight.setVoltage(-ArmConstants.ArmVoltage);
           armInUseUp = true;
