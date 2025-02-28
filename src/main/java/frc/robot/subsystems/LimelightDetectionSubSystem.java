@@ -51,7 +51,6 @@ public class LimelightDetectionSubSystem {
             left_command += steering_adjust + distance_adjust;
             right_command -= steering_adjust + distance_adjust;
 */
-
             }
         }
 

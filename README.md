@@ -24,6 +24,7 @@ What's Happening?
 - While waiting for Mechanical to finish the arm on Friday, work on the following:
     - Update kTrackWidth (distance between right and left wheels) & kWheelBase (distance between front and back wheels)
     - Start to setup Elastic
+        - Set Elastic as default dashboard on competition PC: https://docs.wpilib.org/en/stable/docs/software/driverstation/manually-setting-the-driver-station-to-start-custom-dashboard.html
         - UNDER NO CIRCUMSTANCES SHOULD THE ROBOT BE ENABLED!!!!! This will screw up the absoluteEncoder variables. Wait until the arm is installed properly to enable.
         - To setup Elastic and have the new variables be recognized, deploy the code to the robot. Just remember -- DON'T ENABLE IT!!!!
 
