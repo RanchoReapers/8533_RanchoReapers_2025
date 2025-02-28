@@ -13,17 +13,12 @@ What Needs to be Done?
     - Write code for autonomous mode using a controller simulation
     - Translate aim assist code from tank to swerve
 - Implement pathing to autonomous and aim assist using Choreo
-- Setup Elastic as a dashboard
 
 
 What's Happening?
 ----
 - Mechanical is fixing the arm
 - Bumpers are being made
-- While waiting for Mechanical to finish the arm on Friday, work on the following:
-    - Start to setup Elastic
-        - UNDER NO CIRCUMSTANCES SHOULD THE ROBOT BE ENABLED!!!!! This will screw up the absoluteEncoder variables. Wait until the arm is installed properly to enable.
-        - To setup Elastic and have the new variables be recognized, deploy the code to the robot. Just remember -- DON'T ENABLE IT!!!!
 
 
 Controls

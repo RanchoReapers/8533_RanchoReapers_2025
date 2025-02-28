@@ -94,7 +94,7 @@ public class ArmSubSystem extends SubsystemBase {
     // set the number of degrees to be one lower/higher depending on direction for movement to allow for stopping time
     if (Math.abs(absolutePositionArmMotorLeft) - Math.abs(absolutePositionArmMotorRight) <= 5 * Math.PI / 180) {
       if (armLow == true && armInUseDown == false) {
-        if (absolutePositionArmMotorLeft >= 10.7 * Math.PI / 180) { // higher -- NOTE THAT 10.7 IS A PLACEHOLDER USE THE FORMULA ONCE YOU MEASURE THE ARM
+        if (absolutePositionArmMotorLeft >= 31.3 * Math.PI / 180) { // higher
           armInUseUp = true;
           armDriveLeft.setVoltage(-ArmConstants.ArmVoltage);
           armDriveRight.setVoltage(-ArmConstants.ArmVoltage);
@@ -131,6 +131,7 @@ public class ArmSubSystem extends SubsystemBase {
 
     // post to smart dashboard periodically
     SmartDashboard.putBoolean("armLow", armLow);
+    SmartDashboard.putBoolean("armIsCurrentlylow", !armLow);
     SmartDashboard.putBoolean("armInUseDown", armInUseDown);
     SmartDashboard.putBoolean("armInUseUp", armInUseUp);
 

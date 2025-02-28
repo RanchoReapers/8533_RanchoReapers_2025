@@ -11,6 +11,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -42,6 +43,8 @@ public class RobotContainer {
   public final static XboxController operatorController = new XboxController(USB.OPERATOR_CONTROLLER);
   
   public final static Trigger xButton = new JoystickButton(driverController, XboxController.Button.kX.value);
+
+  public final static Field2d m_field = new Field2d();
 
 
   // contains subsystems, OI devices, and commands
