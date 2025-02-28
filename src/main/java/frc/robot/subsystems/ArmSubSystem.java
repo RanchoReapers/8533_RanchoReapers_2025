@@ -22,7 +22,7 @@ public class ArmSubSystem extends SubsystemBase {
   RelativeEncoder RELarmEncoderLeft;
   RelativeEncoder RELarmEncoderRight;
 
-  boolean armLow = false;
+  boolean armLow = false; // where you are TRYING to go
   // lockouts to prevent user switching arm state too often
   boolean armInUseUp = false; // Arm is currently being used to move upwards
   boolean armInUseDown = false; // Arm is currently being used to move downwards
@@ -84,25 +84,25 @@ public class ArmSubSystem extends SubsystemBase {
   }
 
   public void armControl2State(boolean xButton) {
-    if (xButton == true) {
+    if (xButton == true && armInUseDown == false && armInUseUp == false) {
       armLow = !armLow;
     }
     // set the number of degrees to be one lower/higher depending on direction for movement to allow for stopping time
     if (Math.abs(absolutePositionArmMotorLeft) - Math.abs(absolutePositionArmMotorRight) <= 5 * Math.PI / 180) {
       if (armLow == true && armInUseDown == false) {
         if (absolutePositionArmMotorLeft >= 10.7 * Math.PI / 180) { // higher -- NOTE THAT 10.7 IS A PLACEHOLDER USE THE FORMULA ONCE YOU MEASURE THE ARM
+          armInUseUp = true;
           armDriveLeft.setVoltage(-ArmConstants.ArmVoltage);
           armDriveRight.setVoltage(-ArmConstants.ArmVoltage);
-          armInUseUp = true;
         } else {
           endArmMotors();
           armInUseUp = false;
         }
       } else if (armLow == false && armInUseUp == false) {
         if (absolutePositionArmMotorLeft <= 96.3 * Math.PI / 180) { // lower
+          armInUseDown = true;
           armDriveLeft.setVoltage(ArmConstants.ArmVoltage);
           armDriveRight.setVoltage(ArmConstants.ArmVoltage);
-          armInUseDown = true;
         } else {
           endArmMotors();
           armInUseDown = false;

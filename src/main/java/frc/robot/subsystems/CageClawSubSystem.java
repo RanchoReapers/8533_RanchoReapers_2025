@@ -63,23 +63,30 @@ public class CageClawSubSystem extends SubsystemBase {
   }
 
   public void clampControl(boolean yButton) {
-    if (yButton == true) {
+    if (yButton == true && clawInUseOpen == false && clawInUseClosed == false) {  
       clawOpen = !clawOpen;
-    } 
+    }
     if (clawOpen == true && clawInUseOpen == false) {
-      if (absolutePositionClawMotor <= CageClawConstants.CageClawTravelAngle * Math.PI / 180) {
+      if (absolutePositionClawMotor <= 119.7 * Math.PI / 180) {
+        clawInUseClosed = true;
+        cageClawMotor.setVoltage(CageClawConstants.CageClawVoltage);
+      } else {
+        clawInUseClosed = false;
+        clawOpen = false;
+        pleaseCloseClaw();
+      }
+    }
+  }
+
+  public void pleaseCloseClaw() {
+    if (clawOpen == false && clawInUseClosed == false) {
+      if (absolutePositionClawMotor >= 0.7 * Math.PI / 180) {
+        clawInUseOpen = true;
         cageClawMotor.setVoltage(-CageClawConstants.CageClawVoltage);
       } else {
         endClawMotors();
+        clawInUseOpen = false;
       }
-    } else if (clawOpen == false && clawInUseClosed == true) {
-      if (absolutePositionClawMotor >= -CageClawConstants.CageClawTravelAngle * Math.PI / 180) {
-        cageClawMotor.setVoltage(CageClawConstants.CageClawVoltage);
-      } else {
-        endClawMotors();
-      }
-    } else {
-      endClawMotors();
     }
   }
 
