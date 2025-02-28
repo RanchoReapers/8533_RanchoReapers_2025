@@ -26,7 +26,6 @@ What's Happening?
     - Start to setup Elastic
         - UNDER NO CIRCUMSTANCES SHOULD THE ROBOT BE ENABLED!!!!! This will screw up the absoluteEncoder variables. Wait until the arm is installed properly to enable.
         - To setup Elastic and have the new variables be recognized, deploy the code to the robot. Just remember -- DON'T ENABLE IT!!!!
-    - Continue to clean swerve code
 
 
 Controls
