@@ -5,7 +5,6 @@ Team 8533 Robot Code Documentation - FRC REEFSCAPE 2024
 What Needs to be Done?
 ----
 (In order of importance)
-- Update kTrackWidth (distance between right and left wheels) & kWheelBase (distance between front and back wheels)
 - Have Mechanical fix arm and claw -- then mount to robot. IMPORTANT THAT CLAW AND ARM ARE SET TO DESIRED '0' POSITION BEFORE ATTACHMENT!!!!
 - After arm mounted, have Electrical mount all components and SparkMAXes to base. Need to get robot legal & competition ready.
 - Modify arm, intake, and claw code to use the Trigger functionality for calling in commands (WPILib docs)
@@ -22,9 +21,7 @@ What's Happening?
 - Mechanical is fixing the arm
 - Bumpers are being made
 - While waiting for Mechanical to finish the arm on Friday, work on the following:
-    - Update kTrackWidth (distance between right and left wheels) & kWheelBase (distance between front and back wheels)
     - Start to setup Elastic
-        - Set Elastic as default dashboard on competition PC: https://docs.wpilib.org/en/stable/docs/software/driverstation/manually-setting-the-driver-station-to-start-custom-dashboard.html
         - UNDER NO CIRCUMSTANCES SHOULD THE ROBOT BE ENABLED!!!!! This will screw up the absoluteEncoder variables. Wait until the arm is installed properly to enable.
         - To setup Elastic and have the new variables be recognized, deploy the code to the robot. Just remember -- DON'T ENABLE IT!!!!
 

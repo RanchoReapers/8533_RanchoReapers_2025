@@ -49,10 +49,10 @@ public final class Constants {
     public static final class DriveConstants {
         // SECTION - Base measurements
         // NOTE - CHANGE kTrackWidth & kWheelBase IF YOU CHANGE BASE MEASUREMENTS
-        public static final double kTrackWidth = Units.inchesToMeters(20.5);
+        public static final double kTrackWidth = Units.inchesToMeters(23);
         // Distance between right and left wheels ^
 
-        public static final double kWheelBase = Units.inchesToMeters(20.5);
+        public static final double kWheelBase = Units.inchesToMeters(21.2);
         // Distance between front and back wheels ^
 
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
