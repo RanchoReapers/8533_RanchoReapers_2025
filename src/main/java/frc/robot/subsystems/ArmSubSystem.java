@@ -6,6 +6,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.util.Elastic;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.RelativeEncoder;
@@ -29,11 +30,14 @@ public class ArmSubSystem extends SubsystemBase {
 
   double absolutePositionArmMotorLeft;
   double absolutePositionArmMotorRight;
-  // defines the deviation of motors using the relative encoder acting as an absolute encoder
+  // defines the deviation of motors using the relative encoder acting as an
+  // absolute encoder
 
   private static final String PREF_KEY_ARM_MOTOR_LEFT = "ArmMotorAbsolutePositionLeft";
   private static final String PREF_KEY_ARM_MOTOR_RIGHT = "ArmMotorAbsolutePositionRight";
   // preferences keys for saving absolute motor positions in memory
+
+  Elastic.Notification armSyncError = new Elastic.Notification(Elastic.Notification.NotificationLevel.ERROR, "Arm Motors Out Of Sync", "Attempted to move arm but failed. Arm motors more than 5 degrees out of sync.");
 
   public ArmSubSystem(int armLeftCANId, int armRightCanId) {
     armDriveLeft = new SparkMax(armLeftCANId, SparkMax.MotorType.kBrushless);
@@ -72,10 +76,10 @@ public class ArmSubSystem extends SubsystemBase {
   public void updateArmAbsolutePosition() {
     absolutePositionArmMotorLeft += RELarmEncoderLeft.getPosition();
     absolutePositionArmMotorRight += RELarmEncoderRight.getPosition();
-    
+
     RELarmEncoderLeft.setPosition(0.0);
     RELarmEncoderRight.setPosition(0.0);
-    //reset encoders to 0 after reading
+    // reset encoders to 0 after reading
   }
 
   public void endArmMotors() {
@@ -109,7 +113,7 @@ public class ArmSubSystem extends SubsystemBase {
         }
       }
     } else {
-      System.out.println("Attempted to move arm but failed. Arm motors more than 5 degrees out of sync. Check your SmartDashboard data.");
+      Elastic.sendNotification(armSyncError);
       endArmMotors();
       armInUseDown = false;
       armInUseUp = false;
@@ -131,10 +135,10 @@ public class ArmSubSystem extends SubsystemBase {
     SmartDashboard.putBoolean("armInUseUp", armInUseUp);
 
     // Arm debug
-    SmartDashboard.putNumber("SPARK-REL Left ARM motor position", RELarmEncoderLeft.getPosition() * 180/Math.PI);
-    SmartDashboard.putNumber("SPARK-REL Right ARM motor position", RELarmEncoderRight.getPosition() * 180/Math.PI);
-    SmartDashboard.putNumber("CONV-ABS Left ARM motor position", absolutePositionArmMotorLeft * 180/Math.PI);
-    SmartDashboard.putNumber("CONV-ABS Right ARM motor position", absolutePositionArmMotorRight * 180/Math.PI);
+    SmartDashboard.putNumber("SPARK-REL Left ARM motor position", RELarmEncoderLeft.getPosition() * 180 / Math.PI);
+    SmartDashboard.putNumber("SPARK-REL Right ARM motor position", RELarmEncoderRight.getPosition() * 180 / Math.PI);
+    SmartDashboard.putNumber("CONV-ABS Left ARM motor position", absolutePositionArmMotorLeft * 180 / Math.PI);
+    SmartDashboard.putNumber("CONV-ABS Right ARM motor position", absolutePositionArmMotorRight * 180 / Math.PI);
   }
 
 }

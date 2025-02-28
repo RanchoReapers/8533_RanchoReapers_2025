@@ -22,6 +22,7 @@ public class SwerveModule {
 
     private final SparkMax driveMotor;
     private final SparkMax turnMotor;
+
     private final SparkMaxConfig sparkConfigDrive;
     private final SparkMaxConfig sparkConfigTurn;
 
@@ -31,24 +32,19 @@ public class SwerveModule {
     private final PIDController turnPidController;
 
     private final CANcoder absoluteEncoder;
-    private final boolean absoluteEncoderReversed;
-    private final double absoluteEncoderOffsetRad;
+
     private final double chassisOffset = 0;
 
     public SwerveModule(int driveMotorId, int turnMotorId, boolean driveMotorReversed, boolean turnMotorReversed,
-            int absoluteEncoderId, double absoluteEncoderOffset, boolean isAbsoluteEncoderReversed, double chassisOffset) {
+            int absoluteEncoderId, double absoluteEncoderOffset) {
 
-        absoluteEncoderOffsetRad = absoluteEncoderOffset;
-        this.absoluteEncoderReversed = isAbsoluteEncoderReversed;
         absoluteEncoder = new CANcoder(absoluteEncoderId);
 
-        chassisOffset = this.chassisOffset;
+        CANcoderConfiguration CANCoderConfig = new CANcoderConfiguration();
+        CANCoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        CANCoderConfig.MagnetSensor.MagnetOffset = absoluteEncoderOffset;
 
-        CANcoderConfiguration config = new CANcoderConfiguration();
-        config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-        config.MagnetSensor.MagnetOffset = absoluteEncoderOffset;
-
-        absoluteEncoder.getConfigurator().apply(config);
+        absoluteEncoder.getConfigurator().apply(CANCoderConfig);
 
         driveMotor = new SparkMax(driveMotorId, SparkMax.MotorType.kBrushless);
         turnMotor = new SparkMax(turnMotorId, SparkMax.MotorType.kBrushless);
@@ -57,10 +53,10 @@ public class SwerveModule {
 
         sparkConfigDrive
                 .idleMode(IdleMode.kBrake)
-                .inverted(false);
+                .inverted(driveMotorReversed);
         sparkConfigDrive.encoder
-                .positionConversionFactor(1000)
-                .velocityConversionFactor(1000);
+                .positionConversionFactor(ModuleConstants.kDriveEncoderRot2Meter)
+                .velocityConversionFactor(ModuleConstants.kDriveEncoderRot2Meter / 60); // RPM to m/s
         sparkConfigDrive.closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                 .pid(1.0, 0.0, 0.0);
@@ -68,10 +64,10 @@ public class SwerveModule {
 
         sparkConfigTurn
                 .idleMode(IdleMode.kBrake)
-                .inverted(true);
+                .inverted(turnMotorReversed);
         sparkConfigTurn.encoder
-                .positionConversionFactor(Math.PI * 2)
-                .velocityConversionFactor(Math.PI * 2);
+                .positionConversionFactor(ModuleConstants.kTurnEncoderRot2Rad)
+                .velocityConversionFactor(ModuleConstants.kTurnEncoderRot2Rad / 60); // RPM to rad/s
         sparkConfigTurn.closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                 .pid(1.0, 0.0, 0.0);
@@ -82,46 +78,17 @@ public class SwerveModule {
 
         driveEncoder = driveMotor.getEncoder();
         turnEncoder = turnMotor.getEncoder();
-        sparkConfigDrive.encoder.positionConversionFactor(ModuleConstants.kDriveEncoderRot2Meter);
-        sparkConfigDrive.encoder.velocityConversionFactor(ModuleConstants.kDriveEncoderRPM2MeterPerSec);
-        sparkConfigTurn.encoder.positionConversionFactor(ModuleConstants.kTurnEncoderRot2Rad);
-        sparkConfigTurn.encoder.velocityConversionFactor(ModuleConstants.kTurnEncoderRPM2RadPerSec);
-        //driveEncoder.setPositionConversionFactor(ModuleConstants.kDriveEncoderRot2Meter);
-        //driveEncoder.setVelocityConversionFactor(ModuleConstants.kDriveEncoderRPM2MeterPerSec);
-        //turnEncoder.setPositionConversionFactor(ModuleConstants.kTurnEncoderRot2Rad);
-        //turnEncoder.setVelocityConversionFacto r(ModuleConstants.kTurnEncoderRPM2RadPerSec);
 
-    
         turnPidController = new PIDController(0.37, 0, 0);
         turnPidController.enableContinuousInput(-Math.PI, Math.PI);
-    
-        resetEncoders();
-    }
-    public double getDrivePosition() {
-        return driveEncoder.getPosition();
-    }
 
-    public double getTurningPosition() {
-        return turnEncoder.getPosition();
-    }
-
-    public double getDriveVelocity() {
-        return driveEncoder.getVelocity();
-    }
-
-    public double getTurningVelocity() {
-        return turnEncoder.getVelocity();
+        driveEncoder.setPosition(0);
     }
 
     public double getAbsoluteEncoderRad() {
         Rotation2d rot = Rotation2d.fromRadians((absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI));
         return rot.minus(Rotation2d.fromRadians(chassisOffset)).getRadians();}
 
-    public void resetEncoders() {
-        driveEncoder.setPosition(0);
-        //turnEncoder.setPosition(getAbsoluteEncoderRad());
-        //absoluteEncoder.setPosition(0);
-    }
 
     public void resetTurn() {
         double position = getAbsoluteEncoderRad();
@@ -129,7 +96,7 @@ public class SwerveModule {
     }
 
     public SwerveModuleState getState() {
-        return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAbsoluteEncoderRad() - chassisOffset));
+        return new SwerveModuleState(driveEncoder.getVelocity(), new Rotation2d(getAbsoluteEncoderRad() - chassisOffset));
     }
 
     public void setDesiredState(SwerveModuleState state) {
@@ -146,8 +113,6 @@ public class SwerveModule {
         correctedSwerveModuleState.optimize(getState().angle);
         driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
         turnMotor.set(turnPidController.calculate(getAbsoluteEncoderRad(), state.angle.getRadians()));
-        // turnMotor.set(turnPidController.calculate(getTurningPosition(),
-        // state.angle.getDegrees()));
     }
 
     public void stop() {

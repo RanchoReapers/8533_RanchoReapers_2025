@@ -2,14 +2,14 @@ Team 8533 Robot Code Documentation - FRC REEFSCAPE 2024
 ----
 
 
-TODOS
+What Needs to be Done?
 ----
 (In order of importance)
+- Update kTrackWidth (distance between right and left wheels) & kWheelBase (distance between front and back wheels)
 - Have Mechanical fix arm and claw -- then mount to robot. IMPORTANT THAT CLAW AND ARM ARE SET TO DESIRED '0' POSITION BEFORE ATTACHMENT!!!!
 - After arm mounted, have Electrical mount all components and SparkMAXes to base. Need to get robot legal & competition ready.
 - Modify arm, intake, and claw code to use the Trigger functionality for calling in commands (WPILib docs)
     - Deploy new arm & claw code. Test arm, then test claw.
-- Change the way that the claw works to be constantly powered in a direction (low voltage)
 - For the 2 nested steps, first learn how to simulate a controller
     - Write code for autonomous mode using a controller simulation
     - Translate aim assist code from tank to swerve
@@ -22,10 +22,11 @@ What's Happening?
 - Mechanical is fixing the arm
 - Bumpers are being made
 - While waiting for Mechanical to finish the arm on Friday, work on the following:
-    - Let the bumper team use the robot while setting up Elastic -- MAKE SURE THE ROBOT IS POWERED ON WHILE THEY ARE WORKING ON IT SO THAT THE WIFI CAN BE ACCESSED
+    - Update kTrackWidth (distance between right and left wheels) & kWheelBase (distance between front and back wheels)
+    - Start to setup Elastic
         - UNDER NO CIRCUMSTANCES SHOULD THE ROBOT BE ENABLED!!!!! This will screw up the absoluteEncoder variables. Wait until the arm is installed properly to enable.
-        - To setup elastic and have the new variables be recognized, deploy the code to the robot. Just remember -- DONT ENABLE IT!!!!
-    - The claw will not be fixed -- we need to restructure the claw subsystem so that when "open", it is powered until it would fold in on itself and then sent back to the starting position. This way, power is always being applied. Use a low voltage.
+        - To setup Elastic and have the new variables be recognized, deploy the code to the robot. Just remember -- DON'T ENABLE IT!!!!
+    - Continue to clean swerve code
 
 
 Controls
@@ -51,29 +52,7 @@ IF (( currentAprilTag == (# of april tag by coral station for red team) OR curre
 } ELSE IF (( currentAprilTag == (# of april tag by reef station for red team) OR currentAprilTag == (# of april tag by reef station for blue team) )) AND (( 
              distanceFromCurrentTag < (# of meters/inches/feet/cm? away from tag -- need to testing for distance) )) {
 
-    a![2025 FRC REEFSCAPE Controller Layout - 8533RR](https://github.com/user-attachments/assets/59d0ea16-ea2c-4055-883b-54c0c7e93727)
-imAssist("placeCoral");
-    // depends on if we are able to pick up algae whether or not we should add a function to place coral... if we need to line up to pickup algae aim assist will        // hinder & we are not able to distingush between intent to place coral and remove algae..
-    // we could map the aim assist for the coral dropoff to a button press, but still have the pickup be automatic
-    }
-  }
-}
-
-
-ex. 1b (autoimplements pickup assist but dropoff assist must be toggled)
-
-PROCEDURE enableAimAssistLoop {
-REPEAT WHILE (( robotIsEnabled == True )) AND (( aimAssistActive == False)) {
-IF (( currentAprilTag == (# of april tag by coral station for red team) OR currentAprilTag == (# of april tag by coral station for blue team) )) AND ((         
-   distanceFromCurrentTag < (# of meters/inches/feet/cm? away from tag -- need to testing for distance) )) {
-   
-   aimAssist("pickupCoral");
-   
-} ELSE IF (( currentAprilTag == (# of april tag by coral station for red team) OR currentAprilTag == (# of april tag by coral station for blue team) )) AND ((     
-     distanceFromCurrentTag < (# of meters/inches/feet/cm? away from tag -- need to testing for distance) ))  AND (( exampleActivationControllerButton.isPressed == True )) {
-   
-   aimAssist("placeCoral");
-   
+AimAssist("placeCoral");
     }
   }
 }
