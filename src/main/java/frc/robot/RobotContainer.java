@@ -42,7 +42,7 @@ public class RobotContainer {
   public final static XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
   public final static XboxController operatorController = new XboxController(USB.OPERATOR_CONTROLLER);
   
-  public final static Trigger xButton = new JoystickButton(driverController, XboxController.Button.kX.value);
+  public final static Trigger xButtonTrigger = new JoystickButton(driverController, XboxController.Button.kX.value);
 
   public final static Field2d m_field = new Field2d();
 
@@ -55,9 +55,10 @@ public class RobotContainer {
      () -> -driverController.getRawAxis(OIConstants.kDriverRotAxis), 
      () -> !driverController.getLeftBumperButton()));
 
-     armSubsystem.setDefaultCommand(new ArmJoystickCmd(armSubsystem));
+     // armSubsystem.setDefaultCommand(new ArmJoystickCmd(armSubsystem));
      cageClawSubsystem.setDefaultCommand(new CageClawCmd(cageClawSubsystem));
      intakeSubsystem.setDefaultCommand(new IntakeCmd(intakeSubsystem));
+     xButtonTrigger.debounce(0.1).toggleOnTrue(new ArmJoystickCmd(armSubsystem));
   }
 
 

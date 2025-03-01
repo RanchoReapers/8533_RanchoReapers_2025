@@ -87,8 +87,8 @@ public class ArmSubSystem extends SubsystemBase {
     armDriveRight.stopMotor();
   }
 
-  public void armControl2State(boolean xButton) {
-    if (xButton == true && armInUseDown == false && armInUseUp == false) {
+  public void armControl2State() {
+    if (armInUseDown == false && armInUseUp == false) {
       armLow = !armLow;
     }
     // set the number of degrees to be one lower/higher depending on direction for movement to allow for stopping time
