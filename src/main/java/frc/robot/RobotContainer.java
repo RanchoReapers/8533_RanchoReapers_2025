@@ -110,6 +110,7 @@ public class RobotContainer {
         SmartDashboard.putBoolean("Joystick Arm State", driverController.getXButtonPressed());
         SmartDashboard.putBoolean("Joystick Claw State", driverController.getYButtonPressed());
         SmartDashboard.putBoolean("Joystick Intake State", driverController.getAButtonPressed());
+        cageClawSubsystem.periodicOdometry();
     }
 
     public void enabledPeriodic() {
@@ -119,6 +120,8 @@ public class RobotContainer {
         SmartDashboard.putBoolean("Joystick Claw State", driverController.getYButtonPressed());
         SmartDashboard.putBoolean("Joystick Intake State", driverController.getAButtonPressed());
         swerveSubsystem.periodic();
+        cageClawSubsystem.periodicOdometry();
+
     }
 
     public void teleopPeriodic() {
@@ -128,6 +131,7 @@ public class RobotContainer {
         SmartDashboard.putBoolean("Joystick Claw State", driverController.getYButtonPressed());
         SmartDashboard.putBoolean("Joystick Intake State", driverController.getAButtonPressed());
         swerveSubsystem.periodic();
+        cageClawSubsystem.periodicOdometry();
     }
 
     public void enabledInit() {

@@ -94,7 +94,7 @@ public class ArmSubSystem extends SubsystemBase {
     // set the number of degrees to be one lower/higher depending on direction for movement to allow for stopping time
     if (Math.abs(absolutePositionArmMotorLeft) - Math.abs(absolutePositionArmMotorRight) <= 5 * Math.PI / 180) {
       if (armLow == true && armInUseDown == false) {
-        if (absolutePositionArmMotorLeft >= 31.3 * Math.PI / 180) { // higher
+        if (absolutePositionArmMotorLeft >= 10 * Math.PI / 180) { // higher
           armInUseUp = true;
           armDriveLeft.setVoltage(-ArmConstants.ArmVoltage);
           armDriveRight.setVoltage(-ArmConstants.ArmVoltage);
@@ -103,7 +103,7 @@ public class ArmSubSystem extends SubsystemBase {
           armInUseUp = false;
         }
       } else if (armLow == false && armInUseUp == false) {
-        if (absolutePositionArmMotorLeft <= 96.3 * Math.PI / 180) { // lower
+        if (absolutePositionArmMotorLeft <= 31.3 * Math.PI / 180) { // lower
           armInUseDown = true;
           armDriveLeft.setVoltage(ArmConstants.ArmVoltage);
           armDriveRight.setVoltage(ArmConstants.ArmVoltage);
