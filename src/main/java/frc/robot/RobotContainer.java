@@ -104,11 +104,30 @@ public class RobotContainer {
 
     public void disabledPeriodic() {
         //telemetry for debugging
+        swerveSubsystem.periodic();
         swerveSubsystem.disabledPeriodic();
         armSubsystem.periodicOdometry();
         SmartDashboard.putBoolean("Joystick Arm State", driverController.getXButtonPressed());
         SmartDashboard.putBoolean("Joystick Claw State", driverController.getYButtonPressed());
         SmartDashboard.putBoolean("Joystick Intake State", driverController.getAButtonPressed());
+    }
+
+    public void enabledPeriodic() {
+        swerveSubsystem.disabledPeriodic();
+        armSubsystem.periodicOdometry();
+        SmartDashboard.putBoolean("Joystick Arm State", driverController.getXButtonPressed());
+        SmartDashboard.putBoolean("Joystick Claw State", driverController.getYButtonPressed());
+        SmartDashboard.putBoolean("Joystick Intake State", driverController.getAButtonPressed());
+        swerveSubsystem.periodic();
+    }
+
+    public void teleopPeriodic() {
+        swerveSubsystem.disabledPeriodic();
+        armSubsystem.periodicOdometry();
+        SmartDashboard.putBoolean("Joystick Arm State", driverController.getXButtonPressed());
+        SmartDashboard.putBoolean("Joystick Claw State", driverController.getYButtonPressed());
+        SmartDashboard.putBoolean("Joystick Intake State", driverController.getAButtonPressed());
+        swerveSubsystem.periodic();
     }
 
     public void enabledInit() {

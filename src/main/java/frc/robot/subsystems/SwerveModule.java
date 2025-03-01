@@ -85,6 +85,14 @@ public class SwerveModule {
         driveEncoder.setPosition(0);
     }
 
+    public double getDriveVelocity() {
+        return driveEncoder.getVelocity();
+    }
+
+    public double getTurningVelocity() {
+        return turnEncoder.getVelocity();
+    }
+
     public double getAbsoluteEncoderRad() {
         Rotation2d rot = Rotation2d.fromRadians((absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI));
         return rot.minus(Rotation2d.fromRadians(chassisOffset)).getRadians();}
@@ -96,7 +104,7 @@ public class SwerveModule {
     }
 
     public SwerveModuleState getState() {
-        return new SwerveModuleState(driveEncoder.getVelocity(), new Rotation2d(getAbsoluteEncoderRad() - chassisOffset));
+        return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAbsoluteEncoderRad() - chassisOffset));
     }
 
     public void setDesiredState(SwerveModuleState state) {

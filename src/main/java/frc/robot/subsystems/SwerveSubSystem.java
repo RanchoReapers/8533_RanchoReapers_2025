@@ -101,9 +101,16 @@ public class SwerveSubSystem extends SubsystemBase {
             backLeft.getPosition(),
             backRight.getPosition()
         });
-        
-        SmartDashboard.putNumber("Heading", getHeading());
-        SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
+    }
+
+    public double getAverageDriveVelocity() {
+        double aveDriveVeloAggregate = frontLeft.getDriveVelocity() + frontRight.getDriveVelocity() + backLeft.getDriveVelocity() + backRight.getDriveVelocity();
+        return aveDriveVeloAggregate / 4;
+    }
+
+    public double getAverageTurnVelocity() {
+        double aveTurnVeloAggregate = frontLeft.getTurningVelocity() + frontRight.getTurningVelocity() + backLeft.getTurningVelocity() + backRight.getTurningVelocity();
+        return aveTurnVeloAggregate / 4;
     }
 
     public void disabledPeriodic() {
@@ -116,6 +123,18 @@ public class SwerveSubSystem extends SubsystemBase {
 
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
 
+        SmartDashboard.putNumber("Swerve Drive Velocity", getAverageDriveVelocity());
+        SmartDashboard.putNumber("Swerve Turn Velocity", getAverageTurnVelocity());
+
+        SmartDashboard.putNumber("Front Left Drive Velocity", frontLeft.getDriveVelocity());
+        SmartDashboard.putNumber("Front Right Drive Velocity", frontRight.getDriveVelocity());
+        SmartDashboard.putNumber("Back Left Drive Velocity", backLeft.getDriveVelocity());
+        SmartDashboard.putNumber("Back Right Drive Velocity", backRight.getDriveVelocity());
+
+        SmartDashboard.putNumber("Front Left Turn Velocity", frontLeft.getTurningVelocity());
+        SmartDashboard.putNumber("Front Right Turn Velocity", frontRight.getTurningVelocity());
+        SmartDashboard.putNumber("Back Left Turn Velocity", backLeft.getTurningVelocity());
+        SmartDashboard.putNumber("Back Right Turn Velocity", backRight.getTurningVelocity());
     }
 
     public void stopModules() {
