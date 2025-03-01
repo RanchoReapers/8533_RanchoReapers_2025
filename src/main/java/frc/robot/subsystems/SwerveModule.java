@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -28,6 +29,9 @@ public class SwerveModule {
 
     private final RelativeEncoder driveEncoder;
     private final RelativeEncoder turnEncoder;
+
+    private final AbsoluteEncoder driveAbsoluteEncoder;
+    private final AbsoluteEncoder turnAbsoluteEncoder; 
 
     private final PIDController turnPidController;
 
@@ -78,6 +82,9 @@ public class SwerveModule {
 
         driveEncoder = driveMotor.getEncoder();
         turnEncoder = turnMotor.getEncoder();
+
+        driveAbsoluteEncoder = driveMotor.getAbsoluteEncoder();
+        turnAbsoluteEncoder = turnMotor.getAbsoluteEncoder();
 
         turnPidController = new PIDController(0.37, 0, 0);
         turnPidController.enableContinuousInput(-Math.PI, Math.PI);
@@ -130,7 +137,7 @@ public class SwerveModule {
 
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(
-                driveEncoder.getPosition(),
+                driveAbsoluteEncoder.getPosition(),
                 Rotation2d.fromRadians(getAbsoluteEncoderRad()));
     }
 

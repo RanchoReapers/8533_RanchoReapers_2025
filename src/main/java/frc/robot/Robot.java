@@ -39,6 +39,7 @@ public class Robot extends TimedRobot {
         // and put our
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
+        SmartDashboard.putData("Field", RobotContainer.m_field);
     }
 
     /**
@@ -68,7 +69,8 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("CPU Temp", RobotController.getCPUTemp());
         SmartDashboard.putBoolean("RSL", RobotController.getRSLState());
         SmartDashboard.putNumber("Match Time", DriverStation.getMatchTime());
-        SmartDashboard.putData("Field", RobotContainer.m_field);
+        
+        RobotContainer.m_field.setRobotPose(RobotContainer.swerveSubsystem.getPose());
     }
 
     /** This function is called once each time the robot enters Disabled mode. */
@@ -79,7 +81,6 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledPeriodic() {
         m_robotContainer.disabledPeriodic();
-
     }
 
     /**
