@@ -5,12 +5,17 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
 import frc.robot.Constants.ArmConstants;
 import frc.robot.util.Elastic;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class ArmSubSystem extends SubsystemBase {
 
@@ -33,8 +38,8 @@ public class ArmSubSystem extends SubsystemBase {
   // defines the deviation of motors using the relative encoder acting as an
   // absolute encoder
 
-  private static final String PREF_KEY_ARM_MOTOR_LEFT = "ArmMotorAbsolutePositionLeft";
-  private static final String PREF_KEY_ARM_MOTOR_RIGHT = "ArmMotorAbsolutePositionRight";
+  private static final String PREF_KEY_ARM_MOTOR_LEFT = "ArmMotorAbsolutePositionLeftV1";
+  private static final String PREF_KEY_ARM_MOTOR_RIGHT = "ArmMotorAbsolutePositionRightV1";
   // preferences keys for saving absolute motor positions in memory
 
   Elastic.Notification armSyncError = new Elastic.Notification(Elastic.Notification.NotificationLevel.ERROR, "Arm Motors Out Of Sync", "Attempted to move arm but failed. Arm motors more than 5 degrees out of sync.");
@@ -87,14 +92,20 @@ public class ArmSubSystem extends SubsystemBase {
     armDriveRight.stopMotor();
   }
 
-  public void armControl2State() {
+
+  public Command switchArmLow() {
     if (armInUseDown == false && armInUseUp == false) {
       armLow = !armLow;
     }
+    return new InstantCommand();
+  }
+  
+  public void armControl2State() {
+    
     // set the number of degrees to be one lower/higher depending on direction for movement to allow for stopping time
     if (Math.abs(absolutePositionArmMotorLeft) - Math.abs(absolutePositionArmMotorRight) <= 5 * Math.PI / 180) {
       if (armLow == true && armInUseDown == false) {
-        if (absolutePositionArmMotorLeft >= 10 * Math.PI / 180) { // higher
+        if (absolutePositionArmMotorLeft >= -1 * Math.PI / 180) { // higher
           armInUseUp = true;
           armDriveLeft.setVoltage(-ArmConstants.ArmVoltage);
           armDriveRight.setVoltage(-ArmConstants.ArmVoltage);

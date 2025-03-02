@@ -18,6 +18,7 @@ What's Happening?
 ----
 - Fix the way that button press commands are called using trigger objects
       - Arm oscilates -- fix
+      - getRawAxis was fine ... just laggy type highlighting
 - Simulate a controller and program autonomous
 
 
