@@ -15,18 +15,18 @@ public class SwerveJoystickCmd extends Command {
 
   private final SwerveSubSystem swerveSubsystem;
   private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
-  private final Supplier<Boolean> fieldOritentedFunction;
+  private final Supplier<Boolean> fieldOrientedFunction;
 
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
   /** Creates a new SwerveJoystick. */
   public SwerveJoystickCmd(SwerveSubSystem swerveSubsystem, Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, 
-    Supplier<Double> turningSpdFuntion, Supplier<Boolean> fieldOrientedFunction) {
+    Supplier<Double> turningSpdFunction, Supplier<Boolean> fieldOrientedFunction) {
 
       this.swerveSubsystem = swerveSubsystem;
       this.xSpdFunction = xSpdFunction;
       this.ySpdFunction = ySpdFunction;
-      this.turningSpdFunction = turningSpdFuntion;
-      this.fieldOritentedFunction = fieldOrientedFunction;
+      this.turningSpdFunction = turningSpdFunction;
+      this.fieldOrientedFunction = fieldOrientedFunction;
 
   
       this.xLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
@@ -54,7 +54,7 @@ public class SwerveJoystickCmd extends Command {
     turningSpeed = Math.abs(turningSpeed) > OIConstants.kDeadband ? turningSpeed : 0.0;
 
     // 3. Make the driving smoother
-    if (RobotContainer.driverController.getRightBumperButton()){
+    if (RobotContainer.driverController.getR1Button()){
       xSpeed = xLimiter.calculate(xSpeed) * (DriveConstants.kTeleDriveMaxSpeedMetersPerSecond * DriveConstants.kSlowButtonDriveModifier);
       ySpeed = yLimiter.calculate(ySpeed) * (DriveConstants.kTeleDriveMaxSpeedMetersPerSecond * DriveConstants.kSlowButtonDriveModifier);
       turningSpeed = turningLimiter.calculate(turningSpeed) * (DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond * DriveConstants.kSlowButtonTurnModifier);
@@ -68,7 +68,7 @@ public class SwerveJoystickCmd extends Command {
 
     // 4. Construct desired chassis speeds
     ChassisSpeeds chassisSpeeds;
-    if (fieldOritentedFunction.get()) {
+    if (fieldOrientedFunction.get()) {
       // Relative to field
       chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
     } else {

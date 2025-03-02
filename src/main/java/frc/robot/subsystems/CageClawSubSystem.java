@@ -62,10 +62,10 @@ public class CageClawSubSystem extends SubsystemBase {
     cageClawMotor.stopMotor();
   }
 
-  public void clampControl(boolean yButton) {
-    if (yButton == true) {
+  public void clampControl() {
+    if (clawInUseOpen == false && clawInUseClosed == false) {
       clawOpen = !clawOpen;
-    } 
+    }
     if (clawOpen == true && clawInUseOpen == false) {
       if (absolutePositionClawMotor <= CageClawConstants.CageClawTravelAngle * Math.PI / 180) {
         cageClawMotor.setVoltage(-CageClawConstants.CageClawVoltage);

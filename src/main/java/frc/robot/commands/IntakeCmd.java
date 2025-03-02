@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.IntakeSubSystem;
 
 public class IntakeCmd extends Command {
@@ -17,7 +16,7 @@ public class IntakeCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intakeSubSystem.intakeControl(RobotContainer.driverController.getAButtonPressed());
+    intakeSubSystem.intakeControl();
   }
 
   // Called once the command ends or is interrupted.

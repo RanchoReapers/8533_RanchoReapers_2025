@@ -131,7 +131,6 @@ public class ArmSubSystem extends SubsystemBase {
 
     // post to smart dashboard periodically
     SmartDashboard.putBoolean("armLow", armLow);
-    SmartDashboard.putBoolean("armIsCurrentlylow", !armLow);
     SmartDashboard.putBoolean("armInUseDown", armInUseDown);
     SmartDashboard.putBoolean("armInUseUp", armInUseUp);
 

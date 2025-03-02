@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.CageClawSubSystem;
 
 public class CageClawCmd extends Command {
@@ -17,7 +16,7 @@ public class CageClawCmd extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      cageClawSubSystem.clampControl(RobotContainer.driverController.getYButtonPressed());
+      cageClawSubSystem.clampControl();
   }
 
   // Called once the command ends or is interrupted.

@@ -30,10 +30,8 @@ public class IntakeSubSystem extends SubsystemBase {
     intakeMotor.stopMotor();
   }
 
-  public void intakeControl(boolean aPress) {
-    if (aPress == true) {
+  public void intakeControl() {
     intakeOut = !intakeOut;
-    }
     
     if (intakeOut == true) {
       intakeMotor.setVoltage(-IntakeConstants.IntakeVoltage);
