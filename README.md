@@ -5,9 +5,7 @@ Team 8533 Robot Code Documentation - FRC REEFSCAPE 2024
 What Needs to be Done?
 ----
 (In order of importance)
-- Base needs to be replaced.
-- Mechanical fixes arm -- then mount to robot. IMPORTANT THAT CLAW AND ARM ARE SET TO DESIRED '0' POSITION BEFORE ATTACHMENT!!!!
-- After arm mounted, Electrical mounts all components and SparkMAXes to base.
+- Electrical needs to mount all components and SparkMAXes to base.
 - Modify arm, intake, and claw code to use the Trigger functionality for calling in commands (WPILib docs)
     - Deploy new arm & claw code. Test arm, then test claw.
 - For the 2 nested steps, first learn how to simulate a controller
@@ -18,16 +16,9 @@ What Needs to be Done?
 
 What's Happening?
 ----
-- Base is being replaced
-- Robot is being rewired
-- Mechanical is fixing the arm
-        - ^^^ In the meantime:
-          - Turn on robot (DON'T ENABLE) & redeploy code. Then update Elastic on both computers (add average velocity radial gauges to both debug & driver and add all individual as numbers in list to debug)
-          - Fix the way that button press commands are called using trigger objects
-          - Simulate a controller and program autonomous
-- Bumpers are being made
-
-
+- Fix the way that button press commands are called using trigger objects
+      - Arm oscilates -- fix
+- Simulate a controller and program autonomous
 
 
 Controls
