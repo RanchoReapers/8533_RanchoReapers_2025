@@ -30,8 +30,6 @@ import frc.robot.subsystems.ArmSubSystem;
 import frc.robot.subsystems.CageClawSubSystem;
 import frc.robot.subsystems.IntakeSubSystem;
 import frc.robot.subsystems.SwerveSubSystem;
-import frc.robot.subsystems.ButtonDebugSubSystem;
-import frc.robot.commands.ButtonDebugCmd;
 
 public class RobotContainer {
   // Define subsystems and commands
@@ -39,7 +37,6 @@ public class RobotContainer {
   public final static ArmSubSystem armSubsystem = new ArmSubSystem(14,15);
   public final static CageClawSubSystem cageClawSubsystem = new CageClawSubSystem(16);
   public final static IntakeSubSystem intakeSubsystem = new IntakeSubSystem(17);
-  public final static ButtonDebugSubSystem buttonDebugSubsystem = new ButtonDebugSubSystem();
   public final static PS4Controller driverController = new PS4Controller(OIConstants.kDriverControllerPort);
   
   public final static Trigger triangleButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kTriangle.value);
@@ -57,14 +54,12 @@ public class RobotContainer {
      () -> -driverController.getRawAxis(OIConstants.kDriverRotAxis), 
      () -> !driverController.getL1Button()));
 
-     //squareButtonTrigger.debounce(0.1).onTrue(armSubsystem.switchArmLow());
-     //triangleButtonTrigger.debounce(0.1).toggleOnTrue(new CageClawCmd(cageClawSubsystem));
-     //crossButtonTrigger.debounce(0.1).toggleOnTrue(new IntakeCmd(intakeSubsystem));
+     squareButtonTrigger.debounce(0.1).onTrue(armSubsystem.switchArmLow());
+     triangleButtonTrigger.debounce(0.1).toggleOnTrue(new CageClawCmd(cageClawSubsystem));
+     crossButtonTrigger.debounce(0.1).toggleOnTrue(new IntakeCmd(intakeSubsystem));
 
      armSubsystem.setDefaultCommand(new ArmJoystickCmd(armSubsystem));
 
-     //DEBUG:
-     squareButtonTrigger.debounce(0.1).onTrue(new ButtonDebugCmd(buttonDebugSubsystem));
   }
 
 
@@ -118,7 +113,6 @@ public class RobotContainer {
         SmartDashboard.putBoolean("Joystick Claw State", driverController.getTriangleButton());
         SmartDashboard.putBoolean("Joystick Intake State", driverController.getCrossButton());
         cageClawSubsystem.periodicOdometry();
-        buttonDebugSubsystem.debugOdometry();
     }
 
     public void enabledPeriodic() {
@@ -129,7 +123,6 @@ public class RobotContainer {
         SmartDashboard.putBoolean("Joystick Intake State", driverController.getCrossButton());
         swerveSubsystem.periodic();
         cageClawSubsystem.periodicOdometry();
-        buttonDebugSubsystem.debugOdometry();
     }
 
     public void teleopPeriodic() {
@@ -140,7 +133,6 @@ public class RobotContainer {
         SmartDashboard.putBoolean("Joystick Intake State", driverController.getCrossButton());
         swerveSubsystem.periodic();
         cageClawSubsystem.periodicOdometry();
-        buttonDebugSubsystem.debugOdometry();
     }
 
     public void enabledInit() {
