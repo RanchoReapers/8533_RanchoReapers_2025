@@ -6,8 +6,7 @@ What Needs to be Done?
 ----
 (In order of importance)
 - Electrical needs to mount all components and SparkMAXes to base.
-- Modify arm, intake, and claw code to use the Trigger functionality for calling in commands (WPILib docs)
-    - Deploy new arm & claw code. Test arm, then test claw.
+- Modify the arm to use L2/R2 triggers 
 - For the 2 nested steps, first learn how to simulate a controller
     - Write code for autonomous mode using a controller simulation
     - Translate aim assist code from tank to swerve
@@ -16,9 +15,7 @@ What Needs to be Done?
 
 What's Happening?
 ----
-- Fix the way that button press commands are called using trigger objects
-      - Arm oscilates -- fix
-      - getRawAxis was fine ... just laggy type highlighting
+- Modify the arm to use L2/R2 triggers (done -- needs testing)
 - Simulate a controller and program autonomous
 
 
