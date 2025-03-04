@@ -27,7 +27,7 @@ public final class Constants {
     }
 
     public final class IntakeConstants {
-        public static final double IntakeVoltage = 0;
+        public static final double IntakeVoltage = 1.75;
     }
 
     public final class USB {

@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+/*package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -18,52 +18,63 @@ public class LimelightDetectionSubSystem extends SubsystemBase{
 
     long tid = table.getEntry("tid").getInteger(0);
 
-    int tagsInView = 1;
-
     boolean aimAssistActive = false;
     boolean limelightOverride = false;
 
-    // double[]{} botpose = table.getEntry("botpose").getDoubleArray();
+    double[] botpose = table.getEntry("botpose").getDoubleArray(new double[0]);
 
-    public Command activateLimelightOverride() {
-      limelightOverride = !limelightOverride;
-      return new InstantCommand();
-    }
+    double tagsInView = botpose[3];
+    double tagAveDistance = botpose[5];
+
+    double xSpeedLimelight = 0.0;
+    double ySpeedLimelight = 0.0;
+
+    double turnAngleLimelight = 0.0;
 
     public LimelightDetectionSubSystem() {
-        if((tid == 12 || tid == 13 || tid == 2 || tid == 1) && tagsInView == 1 && limelightOverride == false) {
-        //if limelight sees only one tag & it is at one of the pickup stations
+    }
+
+    public Command activateLimelightOverride() {
+        limelightOverride = !limelightOverride;
+        return new InstantCommand();
+    }
+  
+    public void updateLimelightData() {
+        tx = -table.getEntry("tx").getDouble(0.0);
+        ty = -table.getEntry("ty").getDouble(0.0);
+        ta = table.getEntry("ta").getDouble(0.0);
+        tid = table.getEntry("tid").getInteger(0);
+        botpose = table.getEntry("botpose").getDoubleArray(new double[0]);
+        tagsInView = botpose[3];
+        tagAveDistance = botpose[5];
+    }
+
+    public void aimAssist() {
+        updateLimelightData();
+
+        if((tid == 17 || tid == 18 || tid == 19 || tid == 20 || tid == 21 || tid == 22 || tid == 6 || tid == 7 || tid == 8 || tid == 9 || tid == 10 || tid == 11) && tagsInView == 1 && limelightOverride == false && tagAveDistance < 10) {
             aimAssistActive = true;
-        } else if((tid == 17 || tid == 18 || tid == 19 || tid == 20 || tid == 21 || tid == 22 || tid == 6 || tid == 7 || tid == 8 || tid == 9 || tid == 10 || tid == 11) && tagsInView == 1 && limelightOverride == false) {
-        // if limelight sees only one tag & it is at one of the dropoff stations (yes this is the worst possible way of writing this code but it works)
-            aimAssistActive = true;
+            if(tx > 0.5) { // if we are too right
+                xSpeedLimelight = -0.2;
+            } else if(tx < 0.5) { // if we are too left
+                xSpeedLimelight = 0.2;
+            }
         } else {
             aimAssistActive = false;
         }
+    }
 
-        /*
-            if (bButton == false) {
-                double heading_error = -tx; //right pos left neg
-                double distance_error = -ty; //up pos down neg
-                double steering_adjust = 0.0f;
-                long tagNumber = tid;
+    public double getXSpeedLimelight() {
+        return xSpeedLimelight;
+    }
 
-        // tank drive -- rewrite for swerve
+    public double getYSpeedLimelight() {
+        return ySpeedLimelight;
+    }
 
-            if (tx > 1.0) { //if off to the right
-                steering_adjust = LimelightConstants.KpAim * heading_error - LimelightConstants.MinAimCommand;
-            } else if (tx < -1.0) { // if off to the left
-                steering_adjust = LimelightConstants.KpAim * heading_error + LimelightConstants.MinAimCommand;
-            }
-
-            double distance_adjust = LimelightConstants.KpDistance * distance_error;
-
-            left_command += steering_adjust + distance_adjust;
-            right_command -= steering_adjust + distance_adjust;
-
-            }
-        */
-        }
+    public double getTurnAngleLimelight() {
+        return turnAngleLimelight;
+    }
 
     public void periodicOdometry() {
 
@@ -83,5 +94,5 @@ public class LimelightDetectionSubSystem extends SubsystemBase{
     }
 
 }
-
+*/
 

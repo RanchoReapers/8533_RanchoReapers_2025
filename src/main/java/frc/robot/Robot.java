@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.LimelightDetectionSubSystem;
+//import frc.robot.subsystems.LimelightDetectionSubSystem;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
 
     private RobotContainer m_robotContainer;
 
-    LimelightDetectionSubSystem limelightDetectionSubSystem = new LimelightDetectionSubSystem();
+    //LimelightDetectionSubSystem limelightDetectionSubSystem = new LimelightDetectionSubSystem();
     // ArmSubSystem armSubSystem = new ArmSubSystem(14,15);
 
     /**
@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
         // robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
-        limelightDetectionSubSystem.periodicOdometry();
+        //limelightDetectionSubSystem.periodicOdometry();
         SmartDashboard.putNumber("CAN Utilization %", RobotController.getCANStatus().percentBusUtilization * 100.0);
         SmartDashboard.putNumber("Voltage", RobotController.getBatteryVoltage());
         SmartDashboard.putNumber("CPU Temp", RobotController.getCPUTemp());

@@ -5,17 +5,12 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.RelativeEncoder;
 
 import frc.robot.Constants.ArmConstants;
 import frc.robot.util.Elastic;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import com.revrobotics.RelativeEncoder;
-
-import edu.wpi.first.wpilibj.Preferences;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class ArmSubSystem extends SubsystemBase {
 
@@ -25,22 +20,13 @@ public class ArmSubSystem extends SubsystemBase {
   SparkMaxConfig sparkConfigDriveRight;
   SparkMaxConfig sparkConfigDriveLeft;
 
-  RelativeEncoder RELarmEncoderLeft;
-  RelativeEncoder RELarmEncoderRight;
+  RelativeEncoder armEncoderLeft;
+  RelativeEncoder armEncoderRight;
 
   boolean armLow = false; // where you are TRYING to go
   // lockouts to prevent user switching arm state too often
   boolean armInUseUp = false; // Arm is currently being used to move upwards
   boolean armInUseDown = false; // Arm is currently being used to move downwards
-
-  double absolutePositionArmMotorLeft;
-  double absolutePositionArmMotorRight;
-  // defines the deviation of motors using the relative encoder acting as an
-  // absolute encoder
-
-  private static final String PREF_KEY_ARM_MOTOR_LEFT = "ArmMotorAbsolutePositionLeftV1";
-  private static final String PREF_KEY_ARM_MOTOR_RIGHT = "ArmMotorAbsolutePositionRightV1";
-  // preferences keys for saving absolute motor positions in memory
 
   Elastic.Notification armSyncError = new Elastic.Notification(Elastic.Notification.NotificationLevel.ERROR, "Arm Motors Out Of Sync", "Attempted to move arm but failed. Arm motors more than 5 degrees out of sync.");
 
@@ -51,40 +37,27 @@ public class ArmSubSystem extends SubsystemBase {
     sparkConfigDriveRight = new SparkMaxConfig();
     sparkConfigDriveLeft = new SparkMaxConfig();
 
-    RELarmEncoderLeft = armDriveLeft.getEncoder();
-    RELarmEncoderRight = armDriveRight.getEncoder();
-
-    absolutePositionArmMotorLeft = Preferences.getDouble(PREF_KEY_ARM_MOTOR_LEFT, 0.0);
-    absolutePositionArmMotorRight = Preferences.getDouble(PREF_KEY_ARM_MOTOR_RIGHT, 0.0);
+    armEncoderLeft = armDriveLeft.getEncoder();
+    armEncoderRight = armDriveRight.getEncoder();
 
     sparkConfigDriveLeft
         .idleMode(IdleMode.kBrake)
         .inverted(true);
     sparkConfigDriveLeft.encoder
-        .positionConversionFactor(0.003048 * Math.PI * 2)
-        .velocityConversionFactor(0.003048 * Math.PI * 2);
+        .positionConversionFactor(0.021 * Math.PI * 2)
+        .velocityConversionFactor(0.021 * Math.PI * 2);
     sparkConfigDriveLeft.smartCurrentLimit(60, 60);
 
     sparkConfigDriveRight
         .idleMode(IdleMode.kBrake)
         .inverted(false);
     sparkConfigDriveRight.encoder
-        .positionConversionFactor(0.003048 * Math.PI * 2)
-        .velocityConversionFactor(0.003048 * Math.PI * 2);
+        .positionConversionFactor(0.021 * Math.PI * 2)
+        .velocityConversionFactor(0.021 * Math.PI * 2);
     sparkConfigDriveRight.smartCurrentLimit(60, 60);
 
     armDriveLeft.configure(sparkConfigDriveLeft, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     armDriveRight.configure(sparkConfigDriveRight, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-  }
-
-  public void updateArmAbsolutePosition() {
-    absolutePositionArmMotorLeft += RELarmEncoderLeft.getPosition();
-    absolutePositionArmMotorRight += RELarmEncoderRight.getPosition();
-
-    RELarmEncoderLeft.setPosition(0.0);
-    RELarmEncoderRight.setPosition(0.0);
-    // reset encoders to 0 after reading
   }
 
   public void endArmMotors() {
@@ -93,19 +66,17 @@ public class ArmSubSystem extends SubsystemBase {
   }
 
 
-  public Command switchArmLow() {
+  public void switchArmLow() {
     if (armInUseDown == false && armInUseUp == false) {
       armLow = !armLow;
     }
-    return new InstantCommand();
   }
   
   public void armControl2State() {
-    
     // set the number of degrees to be one lower/higher depending on direction for movement to allow for stopping time
-    if (Math.abs(absolutePositionArmMotorLeft) - Math.abs(absolutePositionArmMotorRight) <= 5 * Math.PI / 180) {
+    if (Math.abs(armEncoderLeft.getPosition()) - Math.abs(armEncoderRight.getPosition()) <= 5 * Math.PI / 180) {
       if (armLow == true && armInUseDown == false) {
-        if (absolutePositionArmMotorLeft >= -1 * Math.PI / 180) { // higher
+        if (armEncoderLeft.getPosition() >= -90 * Math.PI / 180) { // higher
           armInUseUp = true;
           armDriveLeft.setVoltage(-ArmConstants.ArmVoltage);
           armDriveRight.setVoltage(-ArmConstants.ArmVoltage);
@@ -114,7 +85,7 @@ public class ArmSubSystem extends SubsystemBase {
           armInUseUp = false;
         }
       } else if (armLow == false && armInUseUp == false) {
-        if (absolutePositionArmMotorLeft <= 31.3 * Math.PI / 180) { // lower
+        if (armEncoderLeft.getPosition() <= -58.7 * Math.PI / 180) { // lower
           armInUseDown = true;
           armDriveLeft.setVoltage(ArmConstants.ArmVoltage);
           armDriveRight.setVoltage(ArmConstants.ArmVoltage);
@@ -131,25 +102,13 @@ public class ArmSubSystem extends SubsystemBase {
     }
   }
 
-  public void saveArmAbsoluteMotorPositions() {
-    Preferences.setDouble(PREF_KEY_ARM_MOTOR_LEFT, absolutePositionArmMotorLeft);
-    Preferences.setDouble(PREF_KEY_ARM_MOTOR_RIGHT, absolutePositionArmMotorRight);
-  }
-
   public void periodicOdometry() {
-
-    updateArmAbsolutePosition();
-
-    // post to smart dashboard periodically
     SmartDashboard.putBoolean("armLow", armLow);
     SmartDashboard.putBoolean("armInUseDown", armInUseDown);
     SmartDashboard.putBoolean("armInUseUp", armInUseUp);
 
-    // Arm debug
-    SmartDashboard.putNumber("SPARK-REL Left ARM motor position", RELarmEncoderLeft.getPosition() * 180 / Math.PI);
-    SmartDashboard.putNumber("SPARK-REL Right ARM motor position", RELarmEncoderRight.getPosition() * 180 / Math.PI);
-    SmartDashboard.putNumber("CONV-ABS Left ARM motor position", absolutePositionArmMotorLeft * 180 / Math.PI);
-    SmartDashboard.putNumber("CONV-ABS Right ARM motor position", absolutePositionArmMotorRight * 180 / Math.PI);
+    SmartDashboard.putNumber("Left ARM motor position", armEncoderLeft.getPosition() * 180 / Math.PI);
+    SmartDashboard.putNumber("Right ARM motor position", armEncoderRight.getPosition() * 180 / Math.PI);
   }
 
 }

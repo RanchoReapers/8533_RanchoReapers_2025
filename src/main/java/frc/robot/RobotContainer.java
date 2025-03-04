@@ -30,6 +30,7 @@ import frc.robot.subsystems.ArmSubSystem;
 import frc.robot.subsystems.CageClawSubSystem;
 import frc.robot.subsystems.IntakeSubSystem;
 import frc.robot.subsystems.SwerveSubSystem;
+//import frc.robot.subsystems.LimelightDetectionSubSystem;
 
 public class RobotContainer {
   // Define subsystems and commands
@@ -38,10 +39,14 @@ public class RobotContainer {
   public final static CageClawSubSystem cageClawSubsystem = new CageClawSubSystem(16);
   public final static IntakeSubSystem intakeSubsystem = new IntakeSubSystem(17);
   public final static PS4Controller driverController = new PS4Controller(OIConstants.kDriverControllerPort);
+  // public final static LimelightDetectionSubSystem limelightDetectionSubSystem = new LimelightDetectionSubSystem();
   
   public final static Trigger triangleButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kTriangle.value);
   public final static Trigger squareButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kSquare.value);
   public final static Trigger crossButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kCross.value);
+
+  public final static Trigger l2ButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kL2.value);
+  public final static Trigger r2ButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kR2.value);
 
   public final static Field2d m_field = new Field2d();
 
@@ -54,14 +59,49 @@ public class RobotContainer {
      () -> -driverController.getRawAxis(OIConstants.kDriverRotAxis), 
      () -> !driverController.getL1Button()));
 
-     squareButtonTrigger.debounce(0.1).onTrue(armSubsystem.switchArmLow());
-     triangleButtonTrigger.debounce(0.1).toggleOnTrue(new CageClawCmd(cageClawSubsystem));
-     crossButtonTrigger.debounce(0.1).toggleOnTrue(new IntakeCmd(intakeSubsystem));
+     /* interrupt above command, then run this, then rerun the above
+        swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(swerveSubsystem,
+     () -> limelightDetectionSubSystem.getXSpeedLimelight(), 
+     () -> limelightDetectionSubSystem.getYSpeedLimelight(),
+     () -> limelightDetectionSubSystem.getTurnAngleLimelight(), 
+     () -> true));
+      */
 
+     squareButtonTrigger.debounce(0.1).onTrue(armSwitchLowVar()); // press cross and you get square
+     triangleButtonTrigger.debounce(0.1).onTrue(clawSwitchOpenVar()); // press triangle and you get triangle
+     // crossButtonTrigger.debounce(0.1).onTrue(intakeSwitchDirectionVar()); // press circle and you get cross
+     // press square and you get circle
+
+     l2ButtonTrigger.debounce(0.1).onTrue(callIntakeOut());
+     r2ButtonTrigger.debounce(0.1).onTrue(callIntakeIn());
+     l2ButtonTrigger.debounce(0.1).onFalse(callStopIntakeMotor());
+     r2ButtonTrigger.debounce(0.1).onFalse(callStopIntakeMotor());
+
+     cageClawSubsystem.setDefaultCommand(new CageClawCmd(cageClawSubsystem));
      armSubsystem.setDefaultCommand(new ArmJoystickCmd(armSubsystem));
+     intakeSubsystem.setDefaultCommand(new IntakeCmd(intakeSubsystem));
 
   }
 
+  public Command callIntakeOut() {
+      return new InstantCommand(() -> intakeSubsystem.intakeOut());
+  }
+
+  public Command callIntakeIn() {
+      return new InstantCommand(() -> intakeSubsystem.intakeIn());
+  }
+
+  public Command callStopIntakeMotor() {
+      return new InstantCommand(() -> intakeSubsystem.intakeTriggerReleased());
+  }
+
+  public Command armSwitchLowVar() {
+      return new InstantCommand(() -> armSubsystem.switchArmLow());
+  } 
+
+  public Command clawSwitchOpenVar() {
+      return new InstantCommand(() -> cageClawSubsystem.switchClawOpen());
+  }
 
   public Command getAutonomousCommand() {
         // 1. Create trajectory settings
@@ -113,36 +153,17 @@ public class RobotContainer {
         SmartDashboard.putBoolean("Joystick Claw State", driverController.getTriangleButton());
         SmartDashboard.putBoolean("Joystick Intake State", driverController.getCrossButton());
         cageClawSubsystem.periodicOdometry();
-    }
-
-    public void enabledPeriodic() {
-        swerveSubsystem.disabledPeriodic();
-        armSubsystem.periodicOdometry();
-        SmartDashboard.putBoolean("Joystick Arm State", driverController.getSquareButton());
-        SmartDashboard.putBoolean("Joystick Claw State", driverController.getTriangleButton());
-        SmartDashboard.putBoolean("Joystick Intake State", driverController.getCrossButton());
-        swerveSubsystem.periodic();
-        cageClawSubsystem.periodicOdometry();
-    }
-
-    public void teleopPeriodic() {
-        swerveSubsystem.disabledPeriodic();
-        armSubsystem.periodicOdometry();
-        SmartDashboard.putBoolean("Joystick Arm State", driverController.getSquareButton());
-        SmartDashboard.putBoolean("Joystick Claw State", driverController.getTriangleButton());
-        SmartDashboard.putBoolean("Joystick Intake State", driverController.getCrossButton());
-        swerveSubsystem.periodic();
-        cageClawSubsystem.periodicOdometry();
+        SmartDashboard.putNumber("Left Y Joystick Axis", driverController.getRawAxis(OIConstants.kDriverYAxis));
+        SmartDashboard.putNumber("Left X Joystick Axis", driverController.getRawAxis(OIConstants.kDriverXAxis));
+        SmartDashboard.putNumber("Right X Joystick Axis", driverController.getRawAxis(OIConstants.kDriverRotAxis));
     }
 
     public void enabledInit() {
-        RobotContainer.armSubsystem.updateArmAbsolutePosition();
-        RobotContainer.cageClawSubsystem.updateClawAbsolutePosition();
+
     }
 
     public void disabledInit() {
-        RobotContainer.armSubsystem.saveArmAbsoluteMotorPositions();
-        RobotContainer.cageClawSubsystem.saveClawAbsoluteMotorPositions();
+        
     }
     
 }
