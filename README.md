@@ -21,7 +21,7 @@ What's Happening?
 
 Controls
 ----
-ex. 1![2025 FRC REEFSCAPE Controller Layout Revision 2- 8533RR](https://github.com/user-attachments/assets/6a0ba18b-6173-42f5-82f0-292965ba18ca)
+![2025 FRC REEFSCAPE Controller Layout Revision 2- 8533RR](https://github.com/user-attachments/assets/6a0ba18b-6173-42f5-82f0-292965ba18ca)
 
 
 logic for aim assist -- please enter edit mode to read the code below easier:
@@ -30,7 +30,7 @@ when robot IsEnabled {
 enableAimAssistLoop
 }
 
-ex. 1a (detects when to implement aim assist)
+ex. 1 (detects when to implement aim assist)
 
 PROCEDURE enableAimAssistLoop {
 REPEAT WHILE (( robotIsEnabled == True )) AND (( aimAssistActive == False )) {
