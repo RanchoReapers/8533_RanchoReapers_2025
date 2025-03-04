@@ -21,7 +21,7 @@ What's Happening?
 
 Controls
 ----
-![REVISION 1 -- 2025 FRC REEFSCAPE Controller Layout - 8533RR](https://github.com/user-attachments/assets/d10d7e39-8d24-4df8-80bb-e167bba0b169)
+ex. 1![2025 FRC REEFSCAPE Controller Layout Revision 2- 8533RR](https://github.com/user-attachments/assets/6a0ba18b-6173-42f5-82f0-292965ba18ca)
 
 
 logic for aim assist -- please enter edit mode to read the code below easier:
