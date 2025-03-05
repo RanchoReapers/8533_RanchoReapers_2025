@@ -8,7 +8,6 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.Constants.ArmConstants;
-import frc.robot.util.Elastic;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -23,12 +22,14 @@ public class ArmSubSystem extends SubsystemBase {
   RelativeEncoder armEncoderLeft;
   RelativeEncoder armEncoderRight;
 
-  boolean armLow = false; // where you are TRYING to go
+  boolean armLow = true; // where you are TRYING to go
   // lockouts to prevent user switching arm state too often
-  boolean armInUseUp = false; // Arm is currently being used to move upwards
   boolean armInUseDown = false; // Arm is currently being used to move downwards
+  boolean armInUseUp = false; // Arm is currently being used to move upwards
 
-  Elastic.Notification armSyncError = new Elastic.Notification(Elastic.Notification.NotificationLevel.ERROR, "Arm Motors Out Of Sync", "Attempted to move arm but failed. Arm motors more than 5 degrees out of sync.");
+  boolean armForClawLockout = false;
+  boolean armForClawUp = false;
+  boolean armInUseForClaw = false;
 
   public ArmSubSystem(int armLeftCANId, int armRightCanId) {
     armDriveLeft = new SparkMax(armLeftCANId, SparkMax.MotorType.kBrushless);
@@ -44,16 +45,16 @@ public class ArmSubSystem extends SubsystemBase {
         .idleMode(IdleMode.kBrake)
         .inverted(true);
     sparkConfigDriveLeft.encoder
-        .positionConversionFactor(0.021 * Math.PI * 2)
-        .velocityConversionFactor(0.021 * Math.PI * 2);
+        .positionConversionFactor(0.003047619 * Math.PI * 2)
+        .velocityConversionFactor(0.003047619 * Math.PI * 2);
     sparkConfigDriveLeft.smartCurrentLimit(60, 60);
 
     sparkConfigDriveRight
         .idleMode(IdleMode.kBrake)
         .inverted(false);
     sparkConfigDriveRight.encoder
-        .positionConversionFactor(0.021 * Math.PI * 2)
-        .velocityConversionFactor(0.021 * Math.PI * 2);
+        .positionConversionFactor(0.003047619 * Math.PI * 2)
+        .velocityConversionFactor(0.003047619 * Math.PI * 2);
     sparkConfigDriveRight.smartCurrentLimit(60, 60);
 
     armDriveLeft.configure(sparkConfigDriveLeft, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -67,48 +68,68 @@ public class ArmSubSystem extends SubsystemBase {
 
 
   public void switchArmLow() {
-    if (armInUseDown == false && armInUseUp == false) {
+    if (armInUseUp == false && armInUseDown == false && armForClawLockout == false) {
       armLow = !armLow;
     }
   }
-  
-  public void armControl2State() {
-    // set the number of degrees to be one lower/higher depending on direction for movement to allow for stopping time
-    if (Math.abs(armEncoderLeft.getPosition()) - Math.abs(armEncoderRight.getPosition()) <= 5 * Math.PI / 180) {
-      if (armLow == true && armInUseDown == false) {
-        if (armEncoderLeft.getPosition() >= -90 * Math.PI / 180) { // higher
-          armInUseUp = true;
-          armDriveLeft.setVoltage(-ArmConstants.ArmVoltage);
-          armDriveRight.setVoltage(-ArmConstants.ArmVoltage);
-        } else {
-          endArmMotors();
-          armInUseUp = false;
-        }
-      } else if (armLow == false && armInUseUp == false) {
-        if (armEncoderLeft.getPosition() <= -58.7 * Math.PI / 180) { // lower
-          armInUseDown = true;
-          armDriveLeft.setVoltage(ArmConstants.ArmVoltage);
-          armDriveRight.setVoltage(ArmConstants.ArmVoltage);
-        } else {
-          endArmMotors();
-          armInUseDown = false;
-        }
-      }
-    } else {
-      Elastic.sendNotification(armSyncError);
+
+  public void canEndArmMotors() {
+    if (armForClawLockout == false) {
       endArmMotors();
-      armInUseDown = false;
-      armInUseUp = false;
     }
   }
 
-  public void periodicOdometry() {
-    SmartDashboard.putBoolean("armLow", armLow);
-    SmartDashboard.putBoolean("armInUseDown", armInUseDown);
-    SmartDashboard.putBoolean("armInUseUp", armInUseUp);
-
-    SmartDashboard.putNumber("Left ARM motor position", armEncoderLeft.getPosition() * 180 / Math.PI);
-    SmartDashboard.putNumber("Right ARM motor position", armEncoderRight.getPosition() * 180 / Math.PI);
+    public void armControl2State() {
+      // set the number of degrees to be one lower/higher depending on direction for movement to allow for stopping time
+        if (armLow == true && armInUseUp == false && armForClawLockout == false) {
+          if (armEncoderLeft.getPosition() >= -83 * Math.PI / 180) { // higher
+            armInUseDown = true;
+            armDriveLeft.setVoltage(-ArmConstants.ArmVoltage);
+            armDriveRight.setVoltage(-ArmConstants.ArmVoltage);
+          } else {
+            canEndArmMotors();
+            armInUseDown = false;
+            armInUseForClaw = false;
+          }
+        } else if (armLow == false && armInUseDown == false && armForClawLockout == false) {
+          if (armEncoderLeft.getPosition() <= -58.7 * Math.PI / 180) { // lower
+            armInUseUp = true;
+            armDriveLeft.setVoltage(ArmConstants.ArmVoltage);
+            armDriveRight.setVoltage(ArmConstants.ArmVoltage);
+          } else {
+            canEndArmMotors();
+            armInUseUp = false;
+          }
+        }
+    }
+  
+    public void moveArmForClaw() {
+      armForClawUp = !armForClawUp;
+        armForClawLockout = true;
+        if (armInUseForClaw == false && armForClawUp == true) {
+          if (armEncoderLeft.getPosition() <= -0.7) {
+            armInUseForClaw = true;
+            armDriveLeft.setVoltage(ArmConstants.ArmVoltage);
+            armDriveRight.setVoltage(ArmConstants.ArmVoltage);
+          } else {
+            endArmMotors();
+            armInUseForClaw = false;
+          }
+        } else if (armInUseForClaw == false && armForClawUp == false) {
+          armLow = true;
+          armInUseUp = false;
+          armInUseDown = false;
+          armForClawLockout = false;
+        }
   }
-
-}
+  
+    public void periodicOdometry() {
+      SmartDashboard.putBoolean("armLow", armLow);
+      SmartDashboard.putBoolean("armInUseUp", armInUseUp);
+      SmartDashboard.putBoolean("armInUseDown", armInUseDown);
+  
+      SmartDashboard.putNumber("Left ARM motor position", armEncoderLeft.getPosition() * 180 / Math.PI);
+      SmartDashboard.putNumber("Right ARM motor position", armEncoderRight.getPosition() * 180 / Math.PI);
+    }
+  
+  }

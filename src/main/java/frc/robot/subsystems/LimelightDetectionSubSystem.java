@@ -1,11 +1,9 @@
-/*package frc.robot.subsystems;
+package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.LimelightConstants;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -77,22 +75,12 @@ public class LimelightDetectionSubSystem extends SubsystemBase{
     }
 
     public void periodicOdometry() {
-
-        // read values periodically
-        double limelightX = tx;
-        double limelightY = ty;
-        double limelightArea = ta;
-        double currentTid = tid;
-
-        // post to smart dashboard periodically
-        SmartDashboard.putNumber("LimelightX", limelightX);
-        SmartDashboard.putNumber("LimelightY", limelightY);
-        SmartDashboard.putNumber("LimelightArea", limelightArea);
-        SmartDashboard.putNumber("LimelightID", currentTid);
+        SmartDashboard.putNumber("LimelightX", tx);
+        SmartDashboard.putNumber("LimelightY", ty);
+        SmartDashboard.putNumber("LimelightArea", ta);
+        SmartDashboard.putNumber("LimelightID", tid);
         SmartDashboard.putBoolean("aimAssistActive", aimAssistActive);
-
     }
 
 }
-*/
 

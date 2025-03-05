@@ -41,9 +41,9 @@ public class RobotContainer {
   public final static PS4Controller driverController = new PS4Controller(OIConstants.kDriverControllerPort);
   // public final static LimelightDetectionSubSystem limelightDetectionSubSystem = new LimelightDetectionSubSystem();
   
-  public final static Trigger triangleButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kTriangle.value);
+  public final static Trigger circleButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kCircle.value);
   public final static Trigger squareButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kSquare.value);
-  public final static Trigger crossButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kCross.value);
+  public final static Trigger triangleButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kTriangle.value);
 
   public final static Trigger l2ButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kL2.value);
   public final static Trigger r2ButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kR2.value);
@@ -68,19 +68,19 @@ public class RobotContainer {
       */
 
      squareButtonTrigger.debounce(0.1).onTrue(armSwitchLowVar()); // press cross and you get square
-     triangleButtonTrigger.debounce(0.1).onTrue(clawSwitchOpenVar()); // press triangle and you get triangle
-     // crossButtonTrigger.debounce(0.1).onTrue(intakeSwitchDirectionVar()); // press circle and you get cross
+     circleButtonTrigger.debounce(0.1).onTrue(clawSwitchOpenVar()); // press square and you get circle
+     triangleButtonTrigger.debounce(0.1).onTrue(callMoveArmForClaw()); // press triangle and you get triangle
+     // crossButtonTrigger.debounce(0.1).onTrue(intakeSwitchDirectionVar()); // press circle and you get cross; press triangle and you get triangle
      // press square and you get circle
 
-     l2ButtonTrigger.debounce(0.1).onTrue(callIntakeOut());
-     r2ButtonTrigger.debounce(0.1).onTrue(callIntakeIn());
-     l2ButtonTrigger.debounce(0.1).onFalse(callStopIntakeMotor());
+     r2ButtonTrigger.debounce(0.1).whileTrue(callIntakeOut());
+     l2ButtonTrigger.debounce(0.1).whileTrue(callIntakeIn());
      r2ButtonTrigger.debounce(0.1).onFalse(callStopIntakeMotor());
+     l2ButtonTrigger.debounce(0.1).onFalse(callStopIntakeMotor());
 
      cageClawSubsystem.setDefaultCommand(new CageClawCmd(cageClawSubsystem));
      armSubsystem.setDefaultCommand(new ArmJoystickCmd(armSubsystem));
      intakeSubsystem.setDefaultCommand(new IntakeCmd(intakeSubsystem));
-
   }
 
   public Command callIntakeOut() {
@@ -102,6 +102,11 @@ public class RobotContainer {
   public Command clawSwitchOpenVar() {
       return new InstantCommand(() -> cageClawSubsystem.switchClawOpen());
   }
+
+  public Command callMoveArmForClaw() { 
+    return new InstantCommand(() -> armSubsystem.moveArmForClaw());
+    }
+
 
   public Command getAutonomousCommand() {
         // 1. Create trajectory settings

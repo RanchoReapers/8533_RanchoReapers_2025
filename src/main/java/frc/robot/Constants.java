@@ -22,8 +22,7 @@ public final class Constants {
     }
 
     public final class CageClawConstants {
-        public static final double CageClawVoltage = 0;
-        public static final double CageClawTravelAngle = 30;
+        public static final double CageClawVoltage = 1;
     }
 
     public final class IntakeConstants {

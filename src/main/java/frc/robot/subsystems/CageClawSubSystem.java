@@ -21,8 +21,9 @@ public class CageClawSubSystem extends SubsystemBase {
 
   boolean clawOpen = false;
   // lockouts to prevent user switching arm state too often
-  boolean clawInUseOpen = false; // Arm is currently being used to move open
-  boolean clawInUseClosed = false; // Arm is currently being used to move closed
+  boolean clawInUseOpening = false; // Arm is currently being used to move open
+  boolean clawInUseClosing = false; // Arm is currently being used to move closed
+
 
   public CageClawSubSystem(int clampOpenCanId) {
 
@@ -49,33 +50,35 @@ public class CageClawSubSystem extends SubsystemBase {
   }
 
   public void switchClawOpen() {
-    if (clawInUseOpen == false && clawInUseClosed == false) {
+    if (clawInUseClosing == false && clawInUseOpening == false) {
       clawOpen = !clawOpen;
     }
   }
 
   public void clampControl() {
-    if (clawOpen == true && clawInUseOpen == false) {
-      if (clawEncoder.getPosition() <= CageClawConstants.CageClawTravelAngle * Math.PI / 180) {
-        cageClawMotor.setVoltage(-CageClawConstants.CageClawVoltage);
-      } else {
-        endClawMotors();
-      }
-    } else if (clawOpen == false && clawInUseClosed == true) {
-      if (clawEncoder.getPosition() >= -CageClawConstants.CageClawTravelAngle * Math.PI / 180) {
+    if (clawOpen == true && clawInUseClosing == false) {
+      if (clawEncoder.getPosition() <= 50 * Math.PI / 180) {
+        clawInUseOpening = true;
         cageClawMotor.setVoltage(CageClawConstants.CageClawVoltage);
       } else {
         endClawMotors();
+        clawInUseOpening = false;
       }
-    } else {
-      endClawMotors();
+    } else if (clawOpen == false && clawInUseOpening == false) {
+      if (clawEncoder.getPosition() >= 5 * Math.PI / 180) {
+        clawInUseClosing = true;
+        cageClawMotor.setVoltage(-CageClawConstants.CageClawVoltage);
+      } else {
+        endClawMotors();
+        clawInUseClosing = false;
+      }
     }
   }
 
   public void periodicOdometry() {
     SmartDashboard.putBoolean("clawOpen", clawOpen);
-    SmartDashboard.putBoolean("clawInUseOpen", clawInUseOpen);
-    SmartDashboard.putBoolean("clawInUseClosed", clawInUseClosed);
+    SmartDashboard.putBoolean("clawInUseClosing", clawInUseClosing);
+    SmartDashboard.putBoolean("clawInUseOpening", clawInUseOpening);
 
     SmartDashboard.putNumber("CLAW motor position", clawEncoder.getPosition() * 180/Math.PI);
   }
