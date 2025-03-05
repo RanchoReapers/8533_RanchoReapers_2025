@@ -6,8 +6,7 @@ What Needs to be Done?
 ----
 (In order of importance)
 - Electrical needs to mount all components and SparkMAXes to base.
-- Modify arm, intake, and claw code to use the Trigger functionality for calling in commands (WPILib docs)
-    - Deploy new arm & claw code. Test arm, then test claw.
+- Modify the arm to use L2/R2 triggers 
 - For the 2 nested steps, first learn how to simulate a controller
     - Write code for autonomous mode using a controller simulation
     - Translate aim assist code from tank to swerve
@@ -16,15 +15,13 @@ What Needs to be Done?
 
 What's Happening?
 ----
-- Fix the way that button press commands are called using trigger objects
-      - Arm oscilates -- fix
-      - getRawAxis was fine ... just laggy type highlighting
+- Modify the arm to use L2/R2 triggers (done -- needs testing)
 - Simulate a controller and program autonomous
 
 
 Controls
 ----
-![REVISION 1 -- 2025 FRC REEFSCAPE Controller Layout - 8533RR](https://github.com/user-attachments/assets/d10d7e39-8d24-4df8-80bb-e167bba0b169)
+![2025 FRC REEFSCAPE Controller Layout Revision 2- 8533RR](https://github.com/user-attachments/assets/6a0ba18b-6173-42f5-82f0-292965ba18ca)
 
 
 logic for aim assist -- please enter edit mode to read the code below easier:
@@ -33,7 +30,7 @@ when robot IsEnabled {
 enableAimAssistLoop
 }
 
-ex. 1a (detects when to implement aim assist)
+ex. 1 (detects when to implement aim assist)
 
 PROCEDURE enableAimAssistLoop {
 REPEAT WHILE (( robotIsEnabled == True )) AND (( aimAssistActive == False )) {
