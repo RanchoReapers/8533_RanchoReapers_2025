@@ -5,6 +5,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.Constants.ArmConstants;
@@ -23,13 +24,13 @@ public class ArmSubSystem extends SubsystemBase {
   RelativeEncoder armEncoderRight;
 
   boolean armLow = true; // where you are TRYING to go
+  
   // lockouts to prevent user switching arm state too often
-  boolean armInUseDown = false; // Arm is currently being used to move downwards
-  boolean armInUseUp = false; // Arm is currently being used to move upwards
+  boolean armInUseDown = false; 
+  boolean armInUseUp = false;
 
-  boolean armForClawLockout = false;
-  boolean armForClawUp = false;
-  boolean armInUseForClaw = false;
+  boolean armForClawInUse = false;
+  boolean armForClawRequested = false;
 
   public ArmSubSystem(int armLeftCANId, int armRightCanId) {
     armDriveLeft = new SparkMax(armLeftCANId, SparkMax.MotorType.kBrushless);
@@ -66,70 +67,62 @@ public class ArmSubSystem extends SubsystemBase {
     armDriveRight.stopMotor();
   }
 
-
   public void switchArmLow() {
-    if (armInUseUp == false && armInUseDown == false && armForClawLockout == false) {
+    if (armInUseUp == false && armInUseDown == false && armForClawInUse == false) {
       armLow = !armLow;
     }
   }
 
-  public void canEndArmMotors() {
-    if (armForClawLockout == false) {
-      endArmMotors();
+  public void switchClawArmLow() {
+    if (armForClawRequested == false && armForClawInUse == false && armInUseUp == false && armInUseDown == false) {
+      armForClawRequested = true;
+    } else if (armForClawRequested == true && armForClawInUse == false && armInUseUp == false && armInUseDown == false) {
+      armLow = true;
+      armInUseUp = false;
+      armInUseDown = false;
+      armForClawRequested = false;
     }
   }
 
-    public void armControl2State() {
-      // set the number of degrees to be one lower/higher depending on direction for movement to allow for stopping time
-        if (armLow == true && armInUseUp == false && armForClawLockout == false) {
-          if (armEncoderLeft.getPosition() >= -83 * Math.PI / 180) { // higher
-            armInUseDown = true;
-            armDriveLeft.setVoltage(-ArmConstants.ArmVoltage);
-            armDriveRight.setVoltage(-ArmConstants.ArmVoltage);
-          } else {
-            canEndArmMotors();
-            armInUseDown = false;
-            armInUseForClaw = false;
-          }
-        } else if (armLow == false && armInUseDown == false && armForClawLockout == false) {
-          if (armEncoderLeft.getPosition() <= -58.7 * Math.PI / 180) { // lower
-            armInUseUp = true;
-            armDriveLeft.setVoltage(ArmConstants.ArmVoltage);
-            armDriveRight.setVoltage(ArmConstants.ArmVoltage);
-          } else {
-            canEndArmMotors();
-            armInUseUp = false;
-          }
-        }
+  public void armControl3State() {
+    // set the number of degrees to be one lower/higher depending on direction for movement to allow for stopping time
+    if (armForClawRequested == true) {
+      if (armEncoderLeft.getPosition() <= -10 * Math.PI / 180) {
+        armForClawInUse = true;
+        armDriveLeft.setVoltage(ArmConstants.ArmVoltage);
+        armDriveRight.setVoltage(ArmConstants.ArmVoltage);
+      } else {
+        endArmMotors();
+        armForClawInUse = false;
+      }
+    } else if (armLow == true && armInUseUp == false) {
+      if (armEncoderLeft.getPosition() >= -83 * Math.PI / 180) { // higher
+        armInUseDown = true;
+        armDriveLeft.setVoltage(-ArmConstants.ArmVoltage);
+        armDriveRight.setVoltage(-ArmConstants.ArmVoltage);
+      } else {
+        endArmMotors();
+        armInUseDown = false;
+      }
+    } else if (armLow == false && armInUseDown == false) {
+      if (armEncoderLeft.getPosition() <= -58.7 * Math.PI / 180) { // lower
+        armInUseUp = true;
+        armDriveLeft.setVoltage(ArmConstants.ArmVoltage);
+        armDriveRight.setVoltage(ArmConstants.ArmVoltage);
+      } else {
+        endArmMotors();
+        armInUseUp = false;
+      }
     }
-  
-    public void moveArmForClaw() {
-      armForClawUp = !armForClawUp;
-        armForClawLockout = true;
-        if (armInUseForClaw == false && armForClawUp == true) {
-          if (armEncoderLeft.getPosition() <= -0.7) {
-            armInUseForClaw = true;
-            armDriveLeft.setVoltage(ArmConstants.ArmVoltage);
-            armDriveRight.setVoltage(ArmConstants.ArmVoltage);
-          } else {
-            endArmMotors();
-            armInUseForClaw = false;
-          }
-        } else if (armInUseForClaw == false && armForClawUp == false) {
-          armLow = true;
-          armInUseUp = false;
-          armInUseDown = false;
-          armForClawLockout = false;
-        }
   }
-  
-    public void periodicOdometry() {
-      SmartDashboard.putBoolean("armLow", armLow);
-      SmartDashboard.putBoolean("armInUseUp", armInUseUp);
-      SmartDashboard.putBoolean("armInUseDown", armInUseDown);
-  
-      SmartDashboard.putNumber("Left ARM motor position", armEncoderLeft.getPosition() * 180 / Math.PI);
-      SmartDashboard.putNumber("Right ARM motor position", armEncoderRight.getPosition() * 180 / Math.PI);
-    }
-  
+
+  public void periodicOdometry() {
+    SmartDashboard.putBoolean("armLow", armLow);
+    SmartDashboard.putBoolean("armInUseUp", armInUseUp);
+    SmartDashboard.putBoolean("armInUseDown", armInUseDown);
+
+    SmartDashboard.putNumber("Left ARM motor position", armEncoderLeft.getPosition() * 180 / Math.PI);
+    SmartDashboard.putNumber("Right ARM motor position", armEncoderRight.getPosition() * 180 / Math.PI);
   }
+
+}

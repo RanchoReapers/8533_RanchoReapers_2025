@@ -9,8 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CageClawConstants;
 import com.revrobotics.RelativeEncoder;
-;
-
 
 public class CageClawSubSystem extends SubsystemBase {
 

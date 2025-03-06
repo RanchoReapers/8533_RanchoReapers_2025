@@ -1,13 +1,15 @@
-/*package frc.robot.commands;
+package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.LimelightDetectionSubSystem;
+import frc.robot.subsystems.SwerveSubSystem;
 
 public class LimelightDetectionCmd extends Command {
     LimelightDetectionSubSystem limelightDetectionSubSystem;
-    public LimelightDetectionCmd(LimelightDetectionSubSystem limelightDetectionSubSystem) {
+    SwerveSubSystem swerveSubSystem;
+    public LimelightDetectionCmd(LimelightDetectionSubSystem limelightDetectionSubSystem, SwerveSubSystem swerveSubSystem) {
         this.limelightDetectionSubSystem = limelightDetectionSubSystem;
-        addRequirements(limelightDetectionSubSystem);
+        this.swerveSubSystem = swerveSubSystem;
+        addRequirements(limelightDetectionSubSystem, swerveSubSystem);
     }
     // Called when the command is initially scheduled.
   @Override
@@ -30,4 +32,3 @@ public class LimelightDetectionCmd extends Command {
     return false;
   }
 }
-*/

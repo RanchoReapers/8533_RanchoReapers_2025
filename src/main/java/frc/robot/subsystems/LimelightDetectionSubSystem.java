@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.function.BooleanSupplier;
 
 public class LimelightDetectionSubSystem extends SubsystemBase{
 
@@ -20,9 +21,10 @@ public class LimelightDetectionSubSystem extends SubsystemBase{
     boolean limelightOverride = false;
 
     double[] botpose = table.getEntry("botpose").getDoubleArray(new double[0]);
+    double[] testTable = {1,2,3,4,5,6};
 
-    double tagsInView = botpose[3];
-    double tagAveDistance = botpose[5];
+    double tagsInView = testTable[3];
+    double tagAveDistance = testTable[5];
 
     double xSpeedLimelight = 0.0;
     double ySpeedLimelight = 0.0;
@@ -43,8 +45,8 @@ public class LimelightDetectionSubSystem extends SubsystemBase{
         ta = table.getEntry("ta").getDouble(0.0);
         tid = table.getEntry("tid").getInteger(0);
         botpose = table.getEntry("botpose").getDoubleArray(new double[0]);
-        tagsInView = botpose[3];
-        tagAveDistance = botpose[5];
+        tagsInView = testTable[3];
+        tagAveDistance = testTable[5];
     }
 
     public void aimAssist() {
@@ -59,6 +61,7 @@ public class LimelightDetectionSubSystem extends SubsystemBase{
             }
         } else {
             aimAssistActive = false;
+            xSpeedLimelight = 0;
         }
     }
 
@@ -72,6 +75,10 @@ public class LimelightDetectionSubSystem extends SubsystemBase{
 
     public double getTurnAngleLimelight() {
         return turnAngleLimelight;
+    }
+
+    public BooleanSupplier getAimAssistActive() {
+        return () -> aimAssistActive;
     }
 
     public void periodicOdometry() {
