@@ -5,18 +5,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
-
 public final class Constants {
 
-    public final class LimelightConstants {
-        public static final double KpAim = -0.1f;
-        public static final double KpDistance = -0.1f;
-        public static final double MinAimCommand = 0.05f;
-    }
-
-    /* READ -- Cage Claw set to 0 for Arm testing purposes & safety, 
-    once you are sure that Arm works properly, set Cage Claw voltage to 0.3 volts
-    once sure that Cage Claw works properly, test to find proper voltages for each. */
     public final class ArmConstants {
         public static final double ArmVoltage = 1;
     }
