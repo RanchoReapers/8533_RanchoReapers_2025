@@ -1,8 +1,8 @@
 package frc.robot;
 
 import java.util.List;
-
 import choreo.Choreo;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 
@@ -43,7 +43,6 @@ import frc.robot.subsystems.CageClawSubSystem;
 import frc.robot.subsystems.IntakeSubSystem;
 import frc.robot.subsystems.SwerveSubSystem;
 import frc.robot.subsystems.LimelightDetectionSubSystem;
-//import frc.robot.subsystems.LimelightDetectionSubSystem;
 
 public class RobotContainer {
   // Define subsystems and commands
@@ -200,10 +199,6 @@ Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
         SmartDashboard.putBoolean("JOYSTICK PS", driverController.getPSButton());
         SmartDashboard.putBoolean("JOYSTICK R3", driverController.getR3Button());
         SmartDashboard.putBoolean("JOYSTICK L3", driverController.getL3Button());
-
-
-        
-
     }
 
     public void enabledInit() {

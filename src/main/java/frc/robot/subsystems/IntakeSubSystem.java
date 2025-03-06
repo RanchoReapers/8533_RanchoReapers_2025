@@ -42,7 +42,6 @@ public class IntakeSubSystem extends SubsystemBase {
     if (r2Force <= 0.3 && l2Force <= 0.3) {
     intakeMotorStopped = true;
     System.out.println("intakeTriggerReleased() has been called -- && stopping motor");
-
     }
     System.out.println("intakeTriggerReleased() has been called");
   }
@@ -52,7 +51,6 @@ public class IntakeSubSystem extends SubsystemBase {
     r2Force = RobotContainer.driverController.getR2Axis();
     intakeMotorStopped = false;
     System.out.println("intakeOut() has been called");
-
   }
 
   public void intakeIn() {
@@ -60,7 +58,6 @@ public class IntakeSubSystem extends SubsystemBase {
     l2Force = RobotContainer.driverController.getL2Axis();
     intakeMotorStopped = false;
     System.out.println("intakeIn() has been called");
-
   }
 
   public void intakeControl() {
@@ -70,8 +67,7 @@ public class IntakeSubSystem extends SubsystemBase {
       intakeMotor.setVoltage(r2Force * IntakeConstants.IntakeVoltage);
     } else {
       endIntakeMotor();
-      System.out.println("else on intakeControl");
-
+      System.out.println("else on intakeControl is running");
     }
   }
 
