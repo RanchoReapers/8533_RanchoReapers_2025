@@ -12,6 +12,8 @@ public class IntakeSubSystem extends SubsystemBase {
   boolean intakeOut = false;
   double l2Force = 1;
   double r2Force = 1;
+  double l2ForceFixed = 0;
+  double r2ForceFixed = 0;
   boolean intakeMotorStopped = true;
 
   SparkMax intakeMotor;
@@ -35,29 +37,24 @@ public class IntakeSubSystem extends SubsystemBase {
 
   public void endIntakeMotor() {
     intakeMotor.stopMotor();
-    System.out.println("endIntakeMotor() has been called");
   }
 
   public void intakeTriggerReleased() {
-    if (r2Force <= 0.3 && l2Force <= 0.3) {
+    if (!RobotContainer.driverController.getL1Button() && !RobotContainer.driverController.getR1Button()) {
     intakeMotorStopped = true;
-    System.out.println("intakeTriggerReleased() has been called -- && stopping motor");
     }
-    System.out.println("intakeTriggerReleased() has been called");
   }
 
   public void intakeOut() {
     intakeOut = true;
-    r2Force = RobotContainer.driverController.getR2Axis();
+    //r2Force = RobotContainer.driverController.getR2Axis();
     intakeMotorStopped = false;
-    System.out.println("intakeOut() has been called");
   }
 
   public void intakeIn() {
     intakeOut = false;
-    l2Force = RobotContainer.driverController.getL2Axis();
+    //l2Force = RobotContainer.driverController.getL2Axis();
     intakeMotorStopped = false;
-    System.out.println("intakeIn() has been called");
   }
 
   public void intakeControl() {
@@ -67,9 +64,21 @@ public class IntakeSubSystem extends SubsystemBase {
       intakeMotor.setVoltage(r2Force * IntakeConstants.IntakeVoltage);
     } else {
       endIntakeMotor();
-      System.out.println("else on intakeControl is running");
     }
   }
+
+  public double getl2Force() {
+    if (l2Force == -1) {
+      l2ForceFixed = 0;
+    } else if (l2Force < 0 ) {
+      l2ForceFixed = Math.abs(l2Force);
+    }
+    return l2ForceFixed;
+  }
+
+  public double getr2Force() {
+    return r2ForceFixed;
+  }                                       
 
   public void intakePeriodic() {
     SmartDashboard.putNumber("l2Force", l2Force);

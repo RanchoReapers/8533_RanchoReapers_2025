@@ -55,11 +55,11 @@ public class RobotContainer {
   
   public final static Trigger circleButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kCircle.value);
   public final static Trigger squareButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kSquare.value);
+  public final static Trigger crossButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kCross.value);
   public final static Trigger triangleButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kTriangle.value);
-  public final static Trigger shareButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kShare.value);
 
-  public final static Trigger l2ButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kL2.value);
-  public final static Trigger r2ButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kR2.value);
+  public final static Trigger l1ButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kL1.value);
+  public final static Trigger r1ButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kR1.value);
 
   public final static Field2d m_field = new Field2d();
 
@@ -79,8 +79,8 @@ public class RobotContainer {
      circleButtonTrigger.debounce(0.1).onTrue(clawSwitchOpenVar()); // press square and you get circle
      // crossButtonTrigger.debounce(0.1).onTrue(intakeSwitchDirectionVar()); // press circle and you get cross
 
-     r2ButtonTrigger.debounce(0.1).whileTrue(callIntakeOut()).whileFalse(callIntakeTriggerReleased());
-     l2ButtonTrigger.debounce(0.1).whileTrue(callIntakeIn()).whileFalse(callIntakeTriggerReleased());
+     r1ButtonTrigger.debounce(0.1).whileTrue(callIntakeOut()).whileFalse(callIntakeTriggerReleased());
+     l1ButtonTrigger.debounce(0.1).whileTrue(callIntakeIn()).whileFalse(callIntakeTriggerReleased());
 
      cageClawSubsystem.setDefaultCommand(new CageClawCmd(cageClawSubsystem));
      armSubsystem.setDefaultCommand(new ArmJoystickCmd(armSubsystem));
@@ -97,7 +97,7 @@ public class RobotContainer {
        () -> -driverController.getRawAxis(OIConstants.kDriverYAxis), 
        () -> -driverController.getRawAxis(OIConstants.kDriverXAxis),
        () -> -driverController.getRawAxis(OIConstants.kDriverRotAxis), 
-       () -> !driverController.getL1Button()), 
+       () -> !driverController.getR2Button()), 
            limelightDetectionSubsystem.getAimAssistActive());
   }
 
@@ -199,6 +199,10 @@ Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
         SmartDashboard.putBoolean("JOYSTICK PS", driverController.getPSButton());
         SmartDashboard.putBoolean("JOYSTICK R3", driverController.getR3Button());
         SmartDashboard.putBoolean("JOYSTICK L3", driverController.getL3Button());
+        SmartDashboard.putNumber("JOYSTICK Left X Axis", driverController.getLeftX());
+        SmartDashboard.putNumber("JOYSTICK Left Y Axis", driverController.getLeftY());
+        SmartDashboard.putNumber("JOYSTICK Right X Axis", driverController.getRightX());
+        SmartDashboard.putNumber("JOYSTICK Right Y Axis", driverController.getRightY());
     }
 
     public void enabledInit() {

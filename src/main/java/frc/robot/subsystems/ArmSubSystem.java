@@ -87,7 +87,7 @@ public class ArmSubSystem extends SubsystemBase {
   public void armControl3State() {
     // set the number of degrees to be one lower/higher depending on direction for movement to allow for stopping time
     if (armForClawRequested == true) {
-      if (armEncoderLeft.getPosition() <= -10 * Math.PI / 180) {
+      if (armEncoderLeft.getPosition() <= 0 * Math.PI / 180) {
         armForClawInUse = true;
         armDriveLeft.setVoltage(ArmConstants.ArmVoltage);
         armDriveRight.setVoltage(ArmConstants.ArmVoltage);
@@ -96,7 +96,7 @@ public class ArmSubSystem extends SubsystemBase {
         armForClawInUse = false;
       }
     } else if (armLow == true && armInUseUp == false) {
-      if (armEncoderLeft.getPosition() >= -83 * Math.PI / 180) { // higher
+      if (armEncoderLeft.getPosition() >= -87 * Math.PI / 180) { // higher
         armInUseDown = true;
         armDriveLeft.setVoltage(-ArmConstants.ArmVoltage);
         armDriveRight.setVoltage(-ArmConstants.ArmVoltage);

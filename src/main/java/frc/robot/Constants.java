@@ -12,11 +12,11 @@ public final class Constants {
     }
 
     public final class CageClawConstants {
-        public static final double CageClawVoltage = 1;
+        public static final double CageClawVoltage = 1.5;
     }
 
     public final class IntakeConstants {
-        public static final double IntakeVoltage = 1.75;
+        public static final double IntakeVoltage = 4;
     }
 
     public final class USB {
