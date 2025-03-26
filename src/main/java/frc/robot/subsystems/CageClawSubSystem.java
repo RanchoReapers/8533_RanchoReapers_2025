@@ -63,7 +63,7 @@ public class CageClawSubSystem extends SubsystemBase {
         clawInUseOpening = false;
       }
     } else if (clawOpen == false && clawInUseOpening == false) {
-      if (clawEncoder.getPosition() >= 5 * Math.PI / 180) {
+      if (clawEncoder.getPosition() >= 0 * Math.PI / 180) {
         clawInUseClosing = true;
         cageClawMotor.setVoltage(-CageClawConstants.CageClawVoltage);
       } else {

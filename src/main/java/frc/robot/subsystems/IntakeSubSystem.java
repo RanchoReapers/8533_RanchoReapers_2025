@@ -47,13 +47,13 @@ public class IntakeSubSystem extends SubsystemBase {
 
   public void intakeOut() {
     intakeOut = true;
-    //r2Force = RobotContainer.driverController.getR2Axis();
+    //l2Force = RobotContainer.driverController.getR2Axis();
     intakeMotorStopped = false;
   }
 
   public void intakeIn() {
     intakeOut = false;
-    //l2Force = RobotContainer.driverController.getL2Axis();
+    //r2Force = RobotContainer.driverController.getL2Axis();
     intakeMotorStopped = false;
   }
 

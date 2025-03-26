@@ -31,7 +31,6 @@ public class SwerveModule {
     private final RelativeEncoder turnEncoder;
 
     private final AbsoluteEncoder driveAbsoluteEncoder;
-    private final AbsoluteEncoder turnAbsoluteEncoder; 
 
     private final PIDController turnPidController;
 
@@ -84,7 +83,6 @@ public class SwerveModule {
         turnEncoder = turnMotor.getEncoder();
 
         driveAbsoluteEncoder = driveMotor.getAbsoluteEncoder();
-        turnAbsoluteEncoder = turnMotor.getAbsoluteEncoder();
 
         turnPidController = new PIDController(0.37, 0, 0);
         turnPidController.enableContinuousInput(-Math.PI, Math.PI);

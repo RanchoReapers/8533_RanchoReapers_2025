@@ -65,22 +65,22 @@ public class RobotContainer {
 
 
   public RobotContainer() {
-    swerveSubsystem.setDefaultCommand(swapDriveControlMethod());
+    //swerveSubsystem.setDefaultCommand(swapDriveControlMethod());
 
-    /* swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(swerveSubsystem,
+    swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(swerveSubsystem,
      () -> -driverController.getRawAxis(OIConstants.kDriverYAxis), 
      () -> -driverController.getRawAxis(OIConstants.kDriverXAxis),
      () -> -driverController.getRawAxis(OIConstants.kDriverRotAxis), 
      () -> !driverController.getL1Button()));
-    */
+    
     
      squareButtonTrigger.debounce(0.1).onTrue(armSwitchLowVar()); // press cross and you get square
      triangleButtonTrigger.debounce(0.1).onTrue(callSwitchClawArmVar()); // press triangle and you get triangle
      circleButtonTrigger.debounce(0.1).onTrue(clawSwitchOpenVar()); // press square and you get circle
      // crossButtonTrigger.debounce(0.1).onTrue(intakeSwitchDirectionVar()); // press circle and you get cross
-
-     r1ButtonTrigger.debounce(0.1).whileTrue(callIntakeOut()).whileFalse(callIntakeTriggerReleased());
-     l1ButtonTrigger.debounce(0.1).whileTrue(callIntakeIn()).whileFalse(callIntakeTriggerReleased());
+    
+     l1ButtonTrigger.debounce(0.1).whileTrue(callIntakeOut()).whileFalse(callIntakeTriggerReleased());
+     r1ButtonTrigger.debounce(0.1).whileTrue(callIntakeIn()).whileFalse(callIntakeTriggerReleased());
 
      cageClawSubsystem.setDefaultCommand(new CageClawCmd(cageClawSubsystem));
      armSubsystem.setDefaultCommand(new ArmJoystickCmd(armSubsystem));
@@ -97,7 +97,7 @@ public class RobotContainer {
        () -> -driverController.getRawAxis(OIConstants.kDriverYAxis), 
        () -> -driverController.getRawAxis(OIConstants.kDriverXAxis),
        () -> -driverController.getRawAxis(OIConstants.kDriverRotAxis), 
-       () -> !driverController.getR2Button()), 
+       () -> driverController.getR2Button()), 
            limelightDetectionSubsystem.getAimAssistActive());
   }
 
@@ -125,48 +125,46 @@ public class RobotContainer {
     return new InstantCommand(() -> armSubsystem.switchClawArmLow());
   }
 
-
   public Command getAutonomousCommand() {
 
     TrajectoryConfig trajectoryConfig = new TrajectoryConfig(
-      AutoConstants.kMaxSpeedMetersPerSecond,
-      AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-              .setKinematics(DriveConstants.kDriveKinematics);
+        AutoConstants.kMaxSpeedMetersPerSecond,
+        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+        .setKinematics(DriveConstants.kDriveKinematics);
 
-// 2. Generate trajectory
-Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-      new Pose2d(0, 0, new Rotation2d(0)),
-      List.of(
-              new Translation2d(0.075, 0),
-              new Translation2d(0.-.075, 0)),
-      new Pose2d(-0.25 , 0.01, Rotation2d.fromDegrees(0)),
-      trajectoryConfig);
+    // 2. Generate trajectory
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+        new Pose2d(0, 0, new Rotation2d(0)),
+        List.of(
+            new Translation2d(0.075, 0),
+            new Translation2d(0. - .075, 0)),
+        new Pose2d(-0.25, 0.01, Rotation2d.fromDegrees(0)),
+        trajectoryConfig);
 
+    // 3. Define PID controllers for tracking trajectory
+    PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
+    PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
+    ProfiledPIDController thetaController = new ProfiledPIDController(
+        AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        // 3. Define PID controllers for tracking trajectory
-        PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
-        PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
-        ProfiledPIDController thetaController = new ProfiledPIDController(
-                AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+    // 4. Construct command to follow trajectory
+    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+        trajectory,
+        swerveSubsystem::getPose,
+        DriveConstants.kDriveKinematics,
+        xController,
+        yController,
+        thetaController,
+        swerveSubsystem::setModuleStates,
+        swerveSubsystem);
 
-        // 4. Construct command to follow trajectory
-       SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-                trajectory,
-                swerveSubsystem::getPose,
-                DriveConstants.kDriveKinematics,
-                xController,
-                yController,
-                thetaController,
-                swerveSubsystem::setModuleStates,
-                swerveSubsystem); 
-
-        // 5. Add some init and wrap-up, and return everything
-        return new SequentialCommandGroup(
-          new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())),
-          swerveControllerCommand,
-          new InstantCommand(() -> swerveSubsystem.stopModules()));
-    }
+    // 5. Add some init and wrap-up, and return everything
+    return new SequentialCommandGroup(
+        new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())),
+        swerveControllerCommand,
+        new InstantCommand(() -> swerveSubsystem.stopModules()));
+  }
 
     public void disabledPeriodic() {
         //telemetry for debugging
