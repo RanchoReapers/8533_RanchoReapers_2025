@@ -5,8 +5,6 @@ Team 8533 Robot Code Documentation - FRC REEFSCAPE 2024
 What Needs to be Done?
 ----
 (In order of importance)
-- Electrical needs to mount all components and SparkMAXes to base.
-- Modify the arm to use L2/R2 triggers 
 - For the 2 nested steps, first learn how to simulate a controller
     - Write code for autonomous mode using a controller simulation
     - Translate aim assist code from tank to swerve
@@ -15,8 +13,6 @@ What Needs to be Done?
 
 What's Happening?
 ----
-- Modify the arm to use L2/R2 triggers (done -- needs testing)
-- Simulate a controller and program autonomous
 
 
 Controls
