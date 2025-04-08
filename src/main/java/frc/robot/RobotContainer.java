@@ -14,8 +14,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 
-
-import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -31,7 +30,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-
 
 import frc.robot.commands.ArmJoystickCmd;
 import frc.robot.commands.CageClawCmd;
@@ -50,16 +48,17 @@ public class RobotContainer {
   public final static ArmSubSystem armSubsystem = new ArmSubSystem(14,15);
   public final static CageClawSubSystem cageClawSubsystem = new CageClawSubSystem(16);
   public final static IntakeSubSystem intakeSubsystem = new IntakeSubSystem(17);
-  public final static PS4Controller driverController = new PS4Controller(OIConstants.kDriverControllerPort);
   public final static LimelightDetectionSubSystem limelightDetectionSubsystem = new LimelightDetectionSubSystem();
-  
-  public final static Trigger circleButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kCircle.value);
-  public final static Trigger squareButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kSquare.value);
-  public final static Trigger crossButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kCross.value);
-  public final static Trigger triangleButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kTriangle.value);
 
-  public final static Trigger l1ButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kL1.value);
-  public final static Trigger r1ButtonTrigger = new JoystickButton(driverController, PS4Controller.Button.kR1.value);
+  public final static XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
+  public final static XboxController operatorController = new XboxController(OIConstants.kOperatorControllerPort);
+  
+  public final static Trigger xboxXButtonTriggerOP = new JoystickButton(operatorController, XboxController.Button.kX.value);
+  public final static Trigger xboxAButtonTriggerOP = new JoystickButton(operatorController, XboxController.Button.kA.value);
+  public final static Trigger xboxYButtonTriggerOP = new JoystickButton(operatorController, XboxController.Button.kY.value);
+
+  public final static Trigger xboxLeftBumperButtonTriggerOP = new JoystickButton(operatorController, XboxController.Button.kLeftBumper.value);
+  public final static Trigger xboxRightBumperButtonTriggerOP = new JoystickButton(operatorController, XboxController.Button.kRightBumper.value);
 
   public final static Field2d m_field = new Field2d();
 
@@ -71,16 +70,15 @@ public class RobotContainer {
      () -> -driverController.getRawAxis(OIConstants.kDriverYAxis), 
      () -> -driverController.getRawAxis(OIConstants.kDriverXAxis),
      () -> -driverController.getRawAxis(OIConstants.kDriverRotAxis), 
-     () -> !driverController.getL1Button()));
+     () -> !driverController.getLeftBumperButton()));
     
     
-     squareButtonTrigger.debounce(0.1).onTrue(armSwitchLowVar()); // press cross and you get square
-     triangleButtonTrigger.debounce(0.1).onTrue(callSwitchClawArmVar()); // press triangle and you get triangle
-     circleButtonTrigger.debounce(0.1).onTrue(clawSwitchOpenVar()); // press square and you get circle
-     // crossButtonTrigger.debounce(0.1).onTrue(intakeSwitchDirectionVar()); // press circle and you get cross
+     xboxAButtonTriggerOP.debounce(0.1).onTrue(armSwitchLowVar());
+     xboxYButtonTriggerOP.debounce(0.1).onTrue(callSwitchClawArmVar());
+     xboxXButtonTriggerOP.debounce(0.1).onTrue(clawSwitchOpenVar());
     
-     l1ButtonTrigger.debounce(0.1).whileTrue(callIntakeOut()).whileFalse(callIntakeTriggerReleased());
-     r1ButtonTrigger.debounce(0.1).whileTrue(callIntakeIn()).whileFalse(callIntakeTriggerReleased());
+     xboxLeftBumperButtonTriggerOP.debounce(0.1).whileTrue(callIntakeOut()).whileFalse(callIntakeTriggerReleased());
+     xboxRightBumperButtonTriggerOP.debounce(0.1).whileTrue(callIntakeIn()).whileFalse(callIntakeTriggerReleased());
 
      cageClawSubsystem.setDefaultCommand(new CageClawCmd(cageClawSubsystem));
      armSubsystem.setDefaultCommand(new ArmJoystickCmd(armSubsystem));
@@ -97,7 +95,7 @@ public class RobotContainer {
        () -> -driverController.getRawAxis(OIConstants.kDriverYAxis), 
        () -> -driverController.getRawAxis(OIConstants.kDriverXAxis),
        () -> -driverController.getRawAxis(OIConstants.kDriverRotAxis), 
-       () -> driverController.getR2Button()), 
+       () -> driverController.getRightBumperButton()), 
            limelightDetectionSubsystem.getAimAssistActive());
   }
 
@@ -136,9 +134,9 @@ public class RobotContainer {
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
         new Pose2d(0, 0, new Rotation2d(0)),
         List.of(
-            new Translation2d(0.075, 0),
-            new Translation2d(0. - .075, 0)),
-        new Pose2d(-0.25, 0.01, Rotation2d.fromDegrees(0)),
+            new Translation2d(0.075, 0), // Slight forward movement
+            new Translation2d(0. - .075, 0)), // Slight backward movement
+            new Pose2d(-0.25, 0.01, Rotation2d.fromDegrees(0)), // Final backward position
         trajectoryConfig);
 
     // 3. Define PID controllers for tracking trajectory
@@ -171,36 +169,14 @@ public class RobotContainer {
         swerveSubsystem.periodic();
         swerveSubsystem.disabledPeriodic();
         armSubsystem.periodicOdometry();
-        SmartDashboard.putBoolean("Joystick Arm State", driverController.getSquareButton());
-        SmartDashboard.putBoolean("Joystick Claw State", driverController.getTriangleButton());
-        SmartDashboard.putNumber("Joystick Intake State R", driverController.getR2Axis());
-        SmartDashboard.putNumber("Joystick Intake State L", driverController.getL2Axis());
+        SmartDashboard.putBoolean("Joystick Arm State", driverController.getAButton());
+        SmartDashboard.putBoolean("Joystick Claw State", driverController.getXButton());
 
         cageClawSubsystem.periodicOdometry();
         SmartDashboard.putNumber("Left Y Joystick Axis", driverController.getRawAxis(OIConstants.kDriverYAxis));
         SmartDashboard.putNumber("Left X Joystick Axis", driverController.getRawAxis(OIConstants.kDriverXAxis));
         SmartDashboard.putNumber("Right X Joystick Axis", driverController.getRawAxis(OIConstants.kDriverRotAxis));
         limelightDetectionSubsystem.periodicOdometry();
-
-        // joystick debug bindings
-        SmartDashboard.putBoolean("JOYSTICK Share", driverController.getShareButton());
-        SmartDashboard.putBoolean("JOYSTICK Options", driverController.getOptionsButton());
-        SmartDashboard.putBoolean("JOYSTICK L1", driverController.getL1Button());
-        SmartDashboard.putBoolean("JOYSTICK R1", driverController.getR1Button());
-        SmartDashboard.putBoolean("JOYSTICK L2", driverController.getL2Button());
-        SmartDashboard.putBoolean("JOYSTICK R2", driverController.getR2Button());
-        SmartDashboard.putBoolean("JOYSTICK Triangle", driverController.getTriangleButton());
-        SmartDashboard.putBoolean("JOYSTICK Square", driverController.getCircleButton());
-        SmartDashboard.putBoolean("JOYSTICK Circle", driverController.getCrossButton());
-        SmartDashboard.putBoolean("JOYSTICK Cross", driverController.getSquareButton());
-        SmartDashboard.putBoolean("JOYSTICK Touchpad", driverController.getTouchpadButton());
-        SmartDashboard.putBoolean("JOYSTICK PS", driverController.getPSButton());
-        SmartDashboard.putBoolean("JOYSTICK R3", driverController.getR3Button());
-        SmartDashboard.putBoolean("JOYSTICK L3", driverController.getL3Button());
-        SmartDashboard.putNumber("JOYSTICK Left X Axis", driverController.getLeftX());
-        SmartDashboard.putNumber("JOYSTICK Left Y Axis", driverController.getLeftY());
-        SmartDashboard.putNumber("JOYSTICK Right X Axis", driverController.getRightX());
-        SmartDashboard.putNumber("JOYSTICK Right Y Axis", driverController.getRightY());
     }
 
     public void enabledInit() {

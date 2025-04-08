@@ -100,8 +100,8 @@ public class SwerveModule {
 
     public double getAbsoluteEncoderRad() {
         Rotation2d rot = Rotation2d.fromRadians((absoluteEncoder.getAbsolutePosition().getValueAsDouble() * 2 * Math.PI));
-        return rot.minus(Rotation2d.fromRadians(chassisOffset)).getRadians();}
-
+        return rot.minus(Rotation2d.fromRadians(chassisOffset)).getRadians();
+    }
 
     public void resetTurn() {
         double position = getAbsoluteEncoderRad();

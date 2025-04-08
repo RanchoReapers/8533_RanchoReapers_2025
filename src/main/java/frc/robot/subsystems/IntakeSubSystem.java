@@ -10,10 +10,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubSystem extends SubsystemBase {
   boolean intakeOut = false;
-  double l2Force = 1;
-  double r2Force = 1;
-  double l2ForceFixed = 0;
-  double r2ForceFixed = 0;
+  double xboxLTForceOP = 1;
+  double xboxRTForceOP = 1;
   boolean intakeMotorStopped = true;
 
   SparkMax intakeMotor;
@@ -40,49 +38,36 @@ public class IntakeSubSystem extends SubsystemBase {
   }
 
   public void intakeTriggerReleased() {
-    if (!RobotContainer.driverController.getL1Button() && !RobotContainer.driverController.getR1Button()) {
+    if (RobotContainer.operatorController.getLeftTriggerAxis() == 0 && RobotContainer.operatorController.getRightTriggerAxis() == 0) {
     intakeMotorStopped = true;
     }
   }
 
   public void intakeOut() {
     intakeOut = true;
-    //l2Force = RobotContainer.driverController.getR2Axis();
+    xboxRTForceOP = RobotContainer.operatorController.getRightTriggerAxis() * 1.5;
     intakeMotorStopped = false;
   }
 
   public void intakeIn() {
     intakeOut = false;
-    //r2Force = RobotContainer.driverController.getL2Axis();
+    xboxRTForceOP = RobotContainer.operatorController.getLeftTriggerAxis() * 1.5;
     intakeMotorStopped = false;
   }
 
   public void intakeControl() {
     if (intakeOut == true && intakeMotorStopped == false) {
-      intakeMotor.setVoltage(l2Force * -IntakeConstants.IntakeVoltage);
+      intakeMotor.setVoltage(xboxLTForceOP * -IntakeConstants.IntakeVoltage);
     } else if (intakeOut == false && intakeMotorStopped == false) {
-      intakeMotor.setVoltage(r2Force * IntakeConstants.IntakeVoltage);
+      intakeMotor.setVoltage(xboxRTForceOP * IntakeConstants.IntakeVoltage);
     } else {
       endIntakeMotor();
     }
   }
 
-  public double getl2Force() {
-    if (l2Force == -1) {
-      l2ForceFixed = 0;
-    } else if (l2Force < 0 ) {
-      l2ForceFixed = Math.abs(l2Force);
-    }
-    return l2ForceFixed;
-  }
-
-  public double getr2Force() {
-    return r2ForceFixed;
-  }                                       
-
   public void intakePeriodic() {
-    SmartDashboard.putNumber("l2Force", l2Force);
-    SmartDashboard.putNumber("r2Force", r2Force);
+    SmartDashboard.putNumber("xboxLTForceOP", xboxLTForceOP);
+    SmartDashboard.putNumber("xboxRTForceOP", xboxRTForceOP);
     SmartDashboard.putBoolean("intakeOut", intakeOut);
     SmartDashboard.putBoolean("intakeMotorStopped", intakeMotorStopped);
   }
