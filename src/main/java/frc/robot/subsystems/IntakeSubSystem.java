@@ -10,8 +10,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubSystem extends SubsystemBase {
   boolean intakeOut = false;
-  double xboxLTForceOP = 1;
-  double xboxRTForceOP = 1;
   boolean intakeMotorStopped = true;
 
   SparkMax intakeMotor;
@@ -45,29 +43,25 @@ public class IntakeSubSystem extends SubsystemBase {
 
   public void intakeOut() {
     intakeOut = true;
-    xboxRTForceOP = RobotContainer.operatorController.getRightTriggerAxis() * 1.5;
     intakeMotorStopped = false;
   }
 
   public void intakeIn() {
     intakeOut = false;
-    xboxRTForceOP = RobotContainer.operatorController.getLeftTriggerAxis() * 1.5;
     intakeMotorStopped = false;
   }
 
   public void intakeControl() {
     if (intakeOut == true && intakeMotorStopped == false) {
-      intakeMotor.setVoltage(xboxLTForceOP * -IntakeConstants.IntakeVoltage);
+      intakeMotor.setVoltage(RobotContainer.operatorController.getLeftTriggerAxis() * 1.5 * -IntakeConstants.IntakeVoltage);
     } else if (intakeOut == false && intakeMotorStopped == false) {
-      intakeMotor.setVoltage(xboxRTForceOP * IntakeConstants.IntakeVoltage);
+      intakeMotor.setVoltage(RobotContainer.operatorController.getRightTriggerAxis() * 1.5 * IntakeConstants.IntakeVoltage);
     } else {
       endIntakeMotor();
     }
   }
 
   public void intakePeriodic() {
-    SmartDashboard.putNumber("xboxLTForceOP", xboxLTForceOP);
-    SmartDashboard.putNumber("xboxRTForceOP", xboxRTForceOP);
     SmartDashboard.putBoolean("intakeOut", intakeOut);
     SmartDashboard.putBoolean("intakeMotorStopped", intakeMotorStopped);
   }

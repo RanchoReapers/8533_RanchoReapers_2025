@@ -1,6 +1,9 @@
-Team 8533 Robot Code Documentation - FRC REEFSCAPE 2024
+Team 8533 Robot Code Documentation - (2025 Workspace) FRC 2026
 ----
 
+What is a Workspace?
+----
+After competition, a Workspace is used to test new features and start changing the code for new elements in next year's robot. For example, the 2025 robot had an arm, but the 2026 robot will have an elevator. In order to keep the old robot working and around for training/testing purposes, a new repository (Workspace) is created as a placeholder for the 2026 repository. Since WPILib forces you to create a new folder when importing a project between major versions (i.e. 2025 > 2026), a new repository is required for the update. To avoid waiting until the next major version of WPILib, between releases a Workspace is used to save code changes that will be implemented the following year.
 
 What Needs to be Done?
 ----
@@ -10,65 +13,13 @@ What Needs to be Done?
     - Translate aim assist code from tank to swerve
 - Implement pathing to autonomous and aim assist using Choreo
 
-
 What's Happening?
 ----
 
-
 Controls
 ----
-![2025 FRC REEFSCAPE Controller Layout Revision 2- 8533RR](https://github.com/user-attachments/assets/6a0ba18b-6173-42f5-82f0-292965ba18ca)
-
-
-logic for aim assist -- please enter edit mode to read the code below easier:
-----
-when robot IsEnabled {
-enableAimAssistLoop
-}
-
-ex. 1 (detects when to implement aim assist)
-
-PROCEDURE enableAimAssistLoop {
-REPEAT WHILE (( robotIsEnabled == True )) AND (( aimAssistActive == False )) {
-IF (( currentAprilTag == (# of april tag by coral station for red team) OR currentAprilTag == (# of april tag by coral station for blue team) )) AND ((         
-   distanceFromCurrentTag < (# of meters/inches/feet/cm? away from tag -- need to testing for distance) )) {
-   
-   aimAssist("pickupCoral");
-   
-} ELSE IF (( currentAprilTag == (# of april tag by reef station for red team) OR currentAprilTag == (# of april tag by reef station for blue team) )) AND (( 
-             distanceFromCurrentTag < (# of meters/inches/feet/cm? away from tag -- need to testing for distance) )) {
-
-AimAssist("placeCoral");
-    }
-  }
-}
-
-ex. 2 (implementation of procedure aimAssist)
-
-PROCEDURE startCooldown {
-WAIT seconds (5)
-enableAimAssistLoop
-}
-
-PROCEDURE aimAssist(param) {
-SET aimAssistActive <- True
-IF (( param == "pickupCoral" )) {
-REPEAT WHILE (( exampleDeactivationControllerButton.isPressed == False )) {
-// aim assist logic for picking up coral
-  }
-SET aimAssistActive <- False
-} ELSE IF (( param == "placeCoral" )) {
-REPEAT WHILE (( exampleDeactivationControllerButton.isPressed == False )) {
-// aim assist logic for placing coral
-    }
-SET aimAssistActive <- False
-  }
-startCooldown
-}
-
-PLEASE NOTE: to implement aim assist the steps are:
-1) auto activate when by reef & coral pickup
-2) deactivate aim assist when a key on the controller is pressed and have a cooldown (like 5 ish seconds -- enough to allow the driver to move out of auto activation range) before aim assist can auto reactivate itself
+**Driver**
+![image](https://github.com/user-attachments/assets/c7b5b36a-91a4-4a2b-84b2-433caab2478b)
 
 
 

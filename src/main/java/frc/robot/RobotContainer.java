@@ -57,8 +57,8 @@ public class RobotContainer {
   public final static Trigger xboxAButtonTriggerOP = new JoystickButton(operatorController, XboxController.Button.kA.value);
   public final static Trigger xboxYButtonTriggerOP = new JoystickButton(operatorController, XboxController.Button.kY.value);
 
-  public final static Trigger xboxLeftBumperButtonTriggerOP = new JoystickButton(operatorController, XboxController.Button.kLeftBumper.value);
-  public final static Trigger xboxRightBumperButtonTriggerOP = new JoystickButton(operatorController, XboxController.Button.kRightBumper.value);
+  public final static Trigger xboxLTButtonTriggerOP = new Trigger(() -> operatorController.getRawAxis(XboxController.Axis.kLeftTrigger.value) >= 0.1);
+  public final static Trigger xboxRTButtonTriggerOP = new Trigger(() -> operatorController.getRawAxis(XboxController.Axis.kRightTrigger.value) >= 0.1);
 
   public final static Field2d m_field = new Field2d();
 
@@ -70,15 +70,15 @@ public class RobotContainer {
      () -> -driverController.getRawAxis(OIConstants.kDriverYAxis), 
      () -> -driverController.getRawAxis(OIConstants.kDriverXAxis),
      () -> -driverController.getRawAxis(OIConstants.kDriverRotAxis), 
-     () -> !driverController.getLeftBumperButton()));
+     () -> !driverController.getRightBumperButton()));
     
     
      xboxAButtonTriggerOP.debounce(0.1).onTrue(armSwitchLowVar());
      xboxYButtonTriggerOP.debounce(0.1).onTrue(callSwitchClawArmVar());
      xboxXButtonTriggerOP.debounce(0.1).onTrue(clawSwitchOpenVar());
     
-     xboxLeftBumperButtonTriggerOP.debounce(0.1).whileTrue(callIntakeOut()).whileFalse(callIntakeTriggerReleased());
-     xboxRightBumperButtonTriggerOP.debounce(0.1).whileTrue(callIntakeIn()).whileFalse(callIntakeTriggerReleased());
+     xboxLTButtonTriggerOP.debounce(0.1).whileTrue(callIntakeOut()).whileFalse(callIntakeTriggerReleased());
+     xboxRTButtonTriggerOP.debounce(0.1).whileTrue(callIntakeIn()).whileFalse(callIntakeTriggerReleased());
 
      cageClawSubsystem.setDefaultCommand(new CageClawCmd(cageClawSubsystem));
      armSubsystem.setDefaultCommand(new ArmJoystickCmd(armSubsystem));
@@ -92,9 +92,9 @@ public class RobotContainer {
     () -> limelightDetectionSubsystem.getTurnAngleLimelight(), 
     () -> false), 
        new SwerveJoystickCmd(swerveSubsystem,
-       () -> -driverController.getRawAxis(OIConstants.kDriverYAxis), 
-       () -> -driverController.getRawAxis(OIConstants.kDriverXAxis),
-       () -> -driverController.getRawAxis(OIConstants.kDriverRotAxis), 
+       () -> driverController.getRawAxis(-OIConstants.kDriverYAxis), 
+       () -> driverController.getRawAxis(OIConstants.kDriverXAxis),
+       () -> driverController.getRawAxis(OIConstants.kDriverRotAxis), 
        () -> driverController.getRightBumperButton()), 
            limelightDetectionSubsystem.getAimAssistActive());
   }
@@ -169,8 +169,8 @@ public class RobotContainer {
         swerveSubsystem.periodic();
         swerveSubsystem.disabledPeriodic();
         armSubsystem.periodicOdometry();
-        SmartDashboard.putBoolean("Joystick Arm State", driverController.getAButton());
-        SmartDashboard.putBoolean("Joystick Claw State", driverController.getXButton());
+        SmartDashboard.putBoolean("Joystick Arm State", operatorController.getAButton());
+        SmartDashboard.putBoolean("Joystick Claw State", operatorController.getXButton());
 
         cageClawSubsystem.periodicOdometry();
         SmartDashboard.putNumber("Left Y Joystick Axis", driverController.getRawAxis(OIConstants.kDriverYAxis));
