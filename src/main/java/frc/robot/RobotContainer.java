@@ -68,8 +68,8 @@ public class RobotContainer {
      xboxYButtonTriggerOP.debounce(0.1).onTrue(callSwitchClawArmVar());
      xboxXButtonTriggerOP.debounce(0.1).onTrue(clawSwitchOpenVar());
     
-     xboxLTButtonTriggerOP.debounce(0.1).whileTrue(callIntakeOut()).whileFalse(callIntakeTriggerReleased());
-     xboxRTButtonTriggerOP.debounce(0.1).whileTrue(callIntakeIn()).whileFalse(callIntakeTriggerReleased());
+     xboxLTButtonTriggerOP.debounce(0.1).whileTrue(callIntakeIn()).whileFalse(callIntakeTriggerReleased());
+     xboxRTButtonTriggerOP.debounce(0.1).whileTrue(callIntakeOut()).whileFalse(callIntakeTriggerReleased());
 
      cageClawSubsystem.setDefaultCommand(new CageClawCmd(cageClawSubsystem));
      armSubsystem.setDefaultCommand(new ArmJoystickCmd(armSubsystem));
