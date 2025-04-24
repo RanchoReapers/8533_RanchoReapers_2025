@@ -4,9 +4,9 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.RobotContainer;
-import frc.robot.Constants.IntakeConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.IntakeConstants;
+import frc.robot.RobotContainer;
 
 public class IntakeSubSystem extends SubsystemBase {
   boolean intakeOut = false;
@@ -53,9 +53,9 @@ public class IntakeSubSystem extends SubsystemBase {
 
   public void intakeControl() {
     if (intakeOut == true && intakeMotorStopped == false) {
-      intakeMotor.setVoltage(RobotContainer.operatorController.getLeftTriggerAxis() * 1.5 * -IntakeConstants.IntakeVoltage);
+      intakeMotor.setVoltage(RobotContainer.operatorController.getRightTriggerAxis() * 2.25 * -IntakeConstants.IntakeVoltage);
     } else if (intakeOut == false && intakeMotorStopped == false) {
-      intakeMotor.setVoltage(RobotContainer.operatorController.getRightTriggerAxis() * 1.5 * IntakeConstants.IntakeVoltage);
+      intakeMotor.setVoltage(RobotContainer.operatorController.getLeftTriggerAxis() * 2.25 * IntakeConstants.IntakeVoltage);
     } else {
       endIntakeMotor();
     }

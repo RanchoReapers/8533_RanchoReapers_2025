@@ -1,23 +1,18 @@
 package frc.robot;
 
 import java.util.List;
-import choreo.Choreo;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -25,22 +20,18 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
-
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-
 import frc.robot.commands.ArmJoystickCmd;
 import frc.robot.commands.CageClawCmd;
 import frc.robot.commands.IntakeCmd;
 import frc.robot.commands.SwerveJoystickCmd;
-
 import frc.robot.subsystems.ArmSubSystem;
 import frc.robot.subsystems.CageClawSubSystem;
 import frc.robot.subsystems.IntakeSubSystem;
-import frc.robot.subsystems.SwerveSubSystem;
 import frc.robot.subsystems.LimelightDetectionSubSystem;
+import frc.robot.subsystems.SwerveSubSystem;
 
 public class RobotContainer {
   // Define subsystems and commands
@@ -92,7 +83,7 @@ public class RobotContainer {
     () -> limelightDetectionSubsystem.getTurnAngleLimelight(), 
     () -> false), 
        new SwerveJoystickCmd(swerveSubsystem,
-       () -> driverController.getRawAxis(-OIConstants.kDriverYAxis), 
+       () -> driverController.getRawAxis(OIConstants.kDriverYAxis), 
        () -> driverController.getRawAxis(OIConstants.kDriverXAxis),
        () -> driverController.getRawAxis(OIConstants.kDriverRotAxis), 
        () -> driverController.getRightBumperButton()), 
