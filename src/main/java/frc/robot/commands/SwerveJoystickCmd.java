@@ -5,11 +5,11 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.RobotContainer;
-import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.SwerveSubSystem;
 
 public class SwerveJoystickCmd extends Command {
@@ -55,7 +55,7 @@ public class SwerveJoystickCmd extends Command {
     turningSpeed = Math.abs(turningSpeed) > OIConstants.kDeadband ? turningSpeed : 0.0;
 
     // 3. Make the driving smoother
-    if (RobotContainer.driverController.getLeftBumperButton()){ // if LB button not pressed, robot moves at full speed. while LB held, driving is slower & more precise
+    if (!RobotContainer.driverController.getLeftBumperButton()){ // if LB button not pressed, robot moves at full speed. while LB held, driving is slower & more precise
       xSpeed = xLimiter.calculate(xSpeed) * (DriveConstants.kTeleDriveMaxSpeedMetersPerSecond * DriveConstants.kSlowButtonDriveModifier);
       ySpeed = yLimiter.calculate(ySpeed) * (DriveConstants.kTeleDriveMaxSpeedMetersPerSecond * DriveConstants.kSlowButtonDriveModifier);
       turningSpeed = turningLimiter.calculate(turningSpeed) * (DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond * DriveConstants.kSlowButtonTurnModifier);
