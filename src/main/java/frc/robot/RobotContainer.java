@@ -58,8 +58,8 @@ public class RobotContainer {
     //swerveSubsystem.setDefaultCommand(swapDriveControlMethod());
 
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(swerveSubsystem,
-     () -> -driverController.getRawAxis(OIConstants.kDriverYAxis), 
-     () -> -driverController.getRawAxis(OIConstants.kDriverXAxis),
+     () -> driverController.getRawAxis(OIConstants.kDriverYAxis), 
+     () -> driverController.getRawAxis(OIConstants.kDriverXAxis),
      () -> -driverController.getRawAxis(OIConstants.kDriverRotAxis), 
      () -> !driverController.getRightBumperButton()));
     
@@ -83,8 +83,8 @@ public class RobotContainer {
     () -> limelightDetectionSubsystem.getTurnAngleLimelight(), 
     () -> false), 
        new SwerveJoystickCmd(swerveSubsystem,
-       () -> driverController.getRawAxis(OIConstants.kDriverYAxis), 
-       () -> driverController.getRawAxis(OIConstants.kDriverXAxis),
+       () -> driverController.getRawAxis(OIConstants.kDriverXAxis), 
+       () -> driverController.getRawAxis(OIConstants.kDriverYAxis),
        () -> driverController.getRawAxis(OIConstants.kDriverRotAxis), 
        () -> driverController.getRightBumperButton()), 
            limelightDetectionSubsystem.getAimAssistActive());
