@@ -60,8 +60,8 @@ public class RobotContainer {
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(swerveSubsystem,
      () -> driverController.getRawAxis(OIConstants.kDriverYAxis), 
      () -> driverController.getRawAxis(OIConstants.kDriverXAxis),
-     () -> -driverController.getRawAxis(OIConstants.kDriverRotAxis), 
-     () -> !driverController.getRightBumperButton()));
+     () -> driverController.getRawAxis(OIConstants.kDriverRotAxis), 
+     () -> driverController.getRightBumperButton()));
     
     
      xboxAButtonTriggerOP.debounce(0.1).onTrue(armSwitchLowVar());
