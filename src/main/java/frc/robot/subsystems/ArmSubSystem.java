@@ -32,9 +32,9 @@ public class ArmSubSystem extends SubsystemBase {
   boolean armForClawInUse = false;
   boolean armForClawRequested = false;
 
-  public ArmSubSystem(int armLeftCANId, int armRightCanId) {
+  public ArmSubSystem(int armLeftCANId, int armRightCANId) {
     armDriveLeft = new SparkMax(armLeftCANId, SparkMax.MotorType.kBrushless);
-    armDriveRight = new SparkMax(armRightCanId, SparkMax.MotorType.kBrushless);
+    armDriveRight = new SparkMax(armRightCANId, SparkMax.MotorType.kBrushless);
 
     sparkConfigDriveRight = new SparkMaxConfig();
     sparkConfigDriveLeft = new SparkMaxConfig();
