@@ -116,7 +116,7 @@ public final class Constants {
         public static final int kDriverXAxis = 0;
         public static final int kDriverRotAxis = 4;
 
-        public static final double kDeadband = 0.12;
+        public static final double kDeadband = 0.16;
     }
 
 }
